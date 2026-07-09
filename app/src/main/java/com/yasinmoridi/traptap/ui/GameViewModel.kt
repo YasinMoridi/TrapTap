@@ -15,6 +15,10 @@ class GameViewModel(
     private val repository: GameRepository
 ) : ViewModel() {
 
+    companion object {
+        const val MAX_LEVEL = 12
+    }
+
     private val _uiState = MutableStateFlow(GameState())
     val uiState: StateFlow<GameState> = _uiState.asStateFlow()
 
@@ -74,7 +78,7 @@ class GameViewModel(
 
     private fun initLevels() {
         viewModelScope.launch {
-            val initial = (1..15).map { 
+            val initial = (1..MAX_LEVEL).map { 
                 LevelEntity(it, if (it == 1) "Current" else "Locked", emoji = when(it) {
                     2 -> "🚪"
                     3 -> "🎚️"
@@ -89,7 +93,7 @@ class GameViewModel(
                     12 -> "😫"
                     else -> "🧩"
                 })
-            } + (16..20).map { LevelEntity(it, "Locked") }
+            }
             repository.insertLevels(initial)
         }
     }
@@ -257,7 +261,7 @@ class GameViewModel(
             
             // Unlock next
             val nextId = currentId + 1
-            if (nextId <= 20) {
+            if (nextId <= MAX_LEVEL) {
                 repository.updateLevel(LevelEntity(nextId, "Current"))
                 val nextLevel = _uiState.value.levels.find { it.id == nextId }?.copy(state = LevelState.Current)
                 _uiState.update { it.copy(currentLevel = nextLevel, showSuccessDialog = false, isAnswered = false, selectedOption = null) }

@@ -40,7 +40,6 @@ fun LevelsScreen(
         modifier = modifier
             .fillMaxSize()
             .background(surfaceColor)
-            .statusBarsPadding()
     ) {
         // Top App Bar
         LevelsTopAppBar(strings, textPrimary, isDark)

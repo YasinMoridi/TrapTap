@@ -39,62 +39,66 @@ class MainActivity : ComponentActivity() {
 
             CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
                 TrapTapTheme(darkTheme = state.isDarkMode) {
-                    Surface(modifier = Modifier.fillMaxSize()) {
-                        when (state.currentScreen) {
-                            Screen.Splash -> {
-                                SplashScreen(
+                    // یک Scaffold کلی برای کل اپلیکیشن (بجز اسپلش و بازی)
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = {
+                            if (state.currentScreen == Screen.Levels || state.currentScreen == Screen.Settings) {
+                                BottomNavigationBar(
                                     strings = state.strings,
                                     isDark = state.isDarkMode,
-                                    onFinished = { viewModel.navigateTo(Screen.Levels) },
-                                    modifier = Modifier.fillMaxSize()
+                                    currentScreen = state.currentScreen,
+                                    onNavigate = { viewModel.navigateTo(it) }
                                 )
                             }
-                            
-                            Screen.Game -> {
-                                GameScreen(
-                                    strings = state.strings,
-                                    level = state.currentLevel,
-                                    isDark = state.isDarkMode,
-                                    selectedOption = state.selectedOption,
-                                    isAnswered = state.isAnswered,
-                                    showHint = state.showHint,
-                                    trollMessageIndex = state.trollMessageIndex,
-                                    onBack = { viewModel.navigateTo(Screen.Levels) },
-                                    onOptionSelected = { opt, isCorrect -> viewModel.onOptionSelected(opt, isCorrect) },
-                                    onToggleHint = { viewModel.toggleHint() },
-                                    onRestart = { viewModel.restartLevel() }
-                                )
-                            }
-                            
-                            // Screens with Bottom Navigation
-                            Screen.Levels, Screen.Settings -> {
-                                Scaffold(
-                                    bottomBar = {
-                                        BottomNavigationBar(
-                                            strings = state.strings,
-                                            isDark = state.isDarkMode,
-                                            currentScreen = state.currentScreen,
-                                            onNavigate = { viewModel.navigateTo(it) }
-                                        )
-                                    }
-                                ) { innerPadding ->
-                                    Box(modifier = Modifier.padding(innerPadding)) {
-                                        if (state.currentScreen == Screen.Levels) {
-                                            LevelsScreen(
-                                                strings = state.strings,
-                                                levels = state.levels,
-                                                isDark = state.isDarkMode,
-                                                onLevelClick = { level -> viewModel.selectLevel(level) }
-                                            )
-                                        } else {
-                                            SettingsScreen(
-                                                strings = state.strings,
-                                                isDark = state.isDarkMode,
-                                                onToggleTheme = { viewModel.toggleTheme() },
-                                                onToggleLanguage = { viewModel.toggleLanguage() }
-                                            )
-                                        }
-                                    }
+                        }
+                    ) { innerPadding ->
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            when (state.currentScreen) {
+                                Screen.Splash -> {
+                                    SplashScreen(
+                                        strings = state.strings,
+                                        isDark = state.isDarkMode,
+                                        onFinished = { viewModel.navigateTo(Screen.Levels) },
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                
+                                Screen.Levels -> {
+                                    LevelsScreen(
+                                        strings = state.strings,
+                                        levels = state.levels,
+                                        isDark = state.isDarkMode,
+                                        onLevelClick = { level -> viewModel.selectLevel(level) },
+                                        modifier = Modifier.padding(innerPadding)
+                                    )
+                                }
+                                
+                                Screen.Settings -> {
+                                    SettingsScreen(
+                                        strings = state.strings,
+                                        isDark = state.isDarkMode,
+                                        onToggleTheme = { viewModel.toggleTheme() },
+                                        onToggleLanguage = { viewModel.toggleLanguage() },
+                                        modifier = Modifier.padding(innerPadding)
+                                    )
+                                }
+
+                                Screen.Game -> {
+                                    GameScreen(
+                                        strings = state.strings,
+                                        level = state.currentLevel,
+                                        isDark = state.isDarkMode,
+                                        selectedOption = state.selectedOption,
+                                        isAnswered = state.isAnswered,
+                                        showHint = state.showHint,
+                                        trollMessageIndex = state.trollMessageIndex,
+                                        onBack = { viewModel.navigateTo(Screen.Levels) },
+                                        onOptionSelected = { opt, isCorrect -> viewModel.onOptionSelected(opt, isCorrect) },
+                                        onToggleHint = { viewModel.toggleHint() },
+                                        onRestart = { viewModel.restartLevel() },
+                                        modifier = Modifier.fillMaxSize()
+                                    )
                                 }
                             }
                         }

@@ -31,7 +31,6 @@ fun SettingsScreen(
         modifier = modifier
             .fillMaxSize()
             .background(surfaceColor)
-            .statusBarsPadding()
     ) {
         // Header
         Row(

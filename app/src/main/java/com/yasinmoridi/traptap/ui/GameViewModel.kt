@@ -17,6 +17,14 @@ class GameViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(GameState())
     val uiState: StateFlow<GameState> = _uiState.asStateFlow()
 
+    init {
+        // Detect system language and set initial strings
+        val systemLang = java.util.Locale.getDefault().language
+        if (systemLang == "fa") {
+            _uiState.update { it.copy(strings = PersianStrings) }
+        }
+    }
+
     fun toggleLanguage() {
         _uiState.update { currentState ->
             val newStrings = if (currentState.strings == EnglishStrings) PersianStrings else EnglishStrings

@@ -1,6 +1,13 @@
 package com.yasinmoridi.traptap
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.media.AudioManager
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,7 +17,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yasinmoridi.traptap.ui.GameViewModel
 import com.yasinmoridi.traptap.ui.Screen
 import com.yasinmoridi.traptap.ui.components.BottomNavigationBar
@@ -20,25 +26,59 @@ import com.yasinmoridi.traptap.ui.screens.SettingsScreen
 import com.yasinmoridi.traptap.ui.screens.SplashScreen
 import com.yasinmoridi.traptap.ui.theme.TrapTapTheme
 import com.yasinmoridi.traptap.ui.util.PersianStrings
+import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 
-class MainActivity : ComponentActivity() {
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
+
+import android.content.IntentFilter
+import android.content.BroadcastReceiver
+import android.content.Intent
+
+class MainActivity : ComponentActivity(), SensorEventListener {
+    private val viewModel: GameViewModel by inject()
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+
+    private val volumeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == "android.media.VOLUME_CHANGED_ACTION") {
+                val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                val current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+                val max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                viewModel.onVolumeChanged(current, max)
+            }
+        }
+    }
+    
+    private val brightnessObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
+        override fun onChange(selfChange: Boolean, uri: Uri?) {
+            super.onChange(selfChange, uri)
+            val brightness = Settings.System.getInt(contentResolver, Settings.System.SCREEN_BRIGHTNESS, 0)
+            viewModel.onBrightnessChanged(brightness)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        contentResolver.registerContentObserver(
+            Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS),
+            false,
+            brightnessObserver
+        )
+
         setContent {
-            val viewModel: GameViewModel = koinViewModel()
             val state by viewModel.uiState.collectAsState()
             
-            // Level 2 Trick Detection: If we were on level 2 and app restarted, pass it!
-            LaunchedEffect(state.levels) {
-                val lvl2 = state.levels.find { it.id == 2 }
-                if (lvl2?.state == com.yasinmoridi.traptap.ui.LevelState.Current) {
-                    // This logic triggers when app starts and lvl 2 is current.
-                    // To make it a real "trap", we'd need to save a "trap_started" flag in Room.
-                }
-            }
-
             val layoutDirection = if (state.strings == PersianStrings) {
                 LayoutDirection.Rtl
             } else {
@@ -102,12 +142,25 @@ class MainActivity : ComponentActivity() {
                                         trollMessageIndex = state.trollMessageIndex,
                                         showSuccessDialog = state.showSuccessDialog,
                                         exitButtonOffset = state.exitButtonOffset,
+                                        sliderValue = state.sliderValue,
+                                        questionOffset = state.questionOffset,
+                                        timer = state.timer,
+                                        buttonTapCount = state.buttonTapCount,
+                                        holdProgress = state.holdProgress,
+                                        pinchScale = state.pinchScale,
                                         onBack = { viewModel.navigateTo(Screen.Levels) },
                                         onOptionSelected = { opt, isCorrect -> viewModel.onOptionSelected(opt, isCorrect) },
                                         onToggleHint = { viewModel.toggleHint() },
                                         onRestart = { viewModel.restartLevel() },
                                         onNextLevel = { viewModel.onNextLevel() },
                                         onMoveExitButton = { viewModel.moveExitButton() },
+                                        onUpdateSlider = { viewModel.updateSlider(it) },
+                                        onUpdateQuestionOffset = { dx, dy -> viewModel.updateQuestionOffset(dx, dy) },
+                                        onStartTimer = { viewModel.startLevel5Timer() },
+                                        onTiredButtonClick = { viewModel.onTiredButtonClick() },
+                                        onUpdateHoldProgress = { viewModel.updateHoldProgress(it) },
+                                        onPinch = { viewModel.onPinch(it) },
+                                        onWinLevel = { viewModel.winLevel() },
                                         modifier = Modifier.fillMaxSize()
                                     )
                                 }
@@ -117,5 +170,46 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        accelerometer?.also { acc ->
+            sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_UI)
+        }
+        registerReceiver(volumeReceiver, IntentFilter("android.media.VOLUME_CHANGED_ACTION"))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+        unregisterReceiver(volumeReceiver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        contentResolver.unregisterContentObserver(brightnessObserver)
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+            viewModel.onGravityChanged(
+                event.values[0],
+                event.values[1],
+                event.values[2]
+            )
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+            val max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            viewModel.onVolumeChanged(current, max)
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

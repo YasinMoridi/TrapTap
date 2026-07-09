@@ -16,5 +16,6 @@ data class LevelEntity(
 data class SettingsEntity(
     @PrimaryKey val id: Int = 0,
     val isDarkMode: Boolean = false,
-    val language: String = "en"
+    val language: String = "en",
+    val level2TrapStarted: Boolean = false
 )

@@ -16,9 +16,17 @@ data class GameState(
     val trollMessageIndex: Int = 0,
     val showSuccessDialog: Boolean = false,
     
-    // Level 2 Trap State
+    // Traps State
     val exitButtonOffset: Pair<Float, Float> = Pair(0f, 0f),
-    val level2TrapStarted: Boolean = false
+    val sliderValue: Float = 0f,
+    val questionOffset: Pair<Float, Float> = Pair(0f, 0f),
+    val timer: Int = 10,
+    val isTimerRunning: Boolean = false,
+    val buttonTapCount: Int = 0,
+    val holdProgress: Float = 0f,
+    val isBrightnessActionDone: Boolean = false,
+    val isVolumeActionDone: Boolean = false,
+    val pinchScale: Float = 1f
 )
 
 enum class Screen {

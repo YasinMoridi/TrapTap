@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinmoridi.traptap.ui.LevelData
 import com.yasinmoridi.traptap.ui.LevelState
-import com.yasinmoridi.traptap.ui.theme.PurpleAccent
+import com.yasinmoridi.traptap.ui.theme.AppColors
 import com.yasinmoridi.traptap.ui.util.AppStrings
 
 @Composable
@@ -32,9 +32,9 @@ fun LevelsScreen(
     onLevelClick: (LevelData) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val textPrimary = if (isDark) Color(0xFFE6E1E5) else Color(0xFF1C1B1F)
-    val textSecondary = if (isDark) Color(0xFFE6E1E5).copy(alpha = 0.55f) else Color(0xFF1C1B1F).copy(alpha = 0.5f)
-    val surfaceColor = if (isDark) Color(0xFF1C1B1F) else Color(0xFFFFFBFE)
+    val textPrimary = if (isDark) AppColors.Dark.TextPrimary else AppColors.Light.TextPrimary
+    val textSecondary = if (isDark) AppColors.Dark.TextSecondary else AppColors.Light.TextSecondary
+    val surfaceColor = if (isDark) AppColors.Dark.Surface else AppColors.Light.Surface
 
     Column(
         modifier = modifier
@@ -78,7 +78,7 @@ fun LevelsTopAppBar(
         Box(
             modifier = Modifier
                 .size(40.dp)
-                .background(if (isDark) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.06f), CircleShape),
+                .background(if (isDark) AppColors.Dark.Border else AppColors.Light.BottomItemBg, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Text("🧩", fontSize = 18.sp)
@@ -95,16 +95,16 @@ fun LevelsTopAppBar(
             modifier = Modifier
                 .border(
                     width = 1.5.dp,
-                    color = Color(0xFFFFB300).copy(alpha = 0.4f),
+                    color = AppColors.AmberAccent.copy(alpha = 0.4f),
                     shape = CircleShape
                 )
-                .background(Color(0xFFFFB300).copy(alpha = if (isDark) 0.15f else 0.12f), CircleShape)
+                .background(AppColors.AmberAccent.copy(alpha = if (isDark) 0.15f else 0.12f), CircleShape)
                 .padding(horizontal = 12.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text("🪙", fontSize = 14.sp)
-            Text(strings.coins, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, color = Color(0xFFF9A825))
+            Text(strings.coins, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, color = AppColors.AmberDeep)
         }
     }
 }
@@ -165,15 +165,15 @@ fun LevelCard(
     onLevelClick: (LevelData) -> Unit
 ) {
     val cardBg = when (level.state) {
-        LevelState.Completed -> if (isDark) Color(0xFF4CAF50).copy(alpha = 0.15f) else Color(0xFFF1F8F1)
-        LevelState.Current -> PurpleAccent
-        LevelState.Locked -> if (isDark) Color.White.copy(alpha = 0.05f) else Color(0xFFF5F0FA)
+        LevelState.Completed -> if (isDark) AppColors.SuccessGreen.copy(alpha = 0.15f) else Color(0xFFF1F8F1)
+        LevelState.Current -> AppColors.PurpleAccent
+        LevelState.Locked -> if (isDark) AppColors.Dark.BottomItemBg else AppColors.Light.OptionBg
     }
     
     val borderColor = when (level.state) {
-        LevelState.Completed -> Color(0xFF4CAF50).copy(alpha = 0.4f)
+        LevelState.Completed -> AppColors.SuccessGreen.copy(alpha = 0.4f)
         LevelState.Current -> Color.Transparent
-        LevelState.Locked -> if (isDark) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.08f)
+        LevelState.Locked -> if (isDark) AppColors.Dark.Border else AppColors.Light.Border
     }
 
     Column(
@@ -216,7 +216,7 @@ fun StarRow(count: Int) {
             Text(
                 "★", 
                 fontSize = 10.sp, 
-                color = if (i < count) Color(0xFFFFB300) else Color.Gray.copy(alpha = 0.3f)
+                color = if (i < count) AppColors.AmberAccent else Color.Gray.copy(alpha = 0.3f)
             )
         }
     }

@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yasinmoridi.traptap.ui.theme.AppColors
 import com.yasinmoridi.traptap.ui.util.AppStrings
 import com.yasinmoridi.traptap.ui.util.PersianStrings
 
@@ -22,10 +23,10 @@ fun SettingsScreen(
     onToggleLanguage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val textPrimary = if (isDark) Color(0xFFE6E1E5) else Color(0xFF1C1B1F)
-    val textSecondary = if (isDark) Color(0xFFE6E1E5).copy(alpha = 0.55f) else Color(0xFF1C1B1F).copy(alpha = 0.5f)
-    val surfaceColor = if (isDark) Color(0xFF1C1B1F) else Color(0xFFFFFBFE)
-    val cardSurface = if (isDark) Color(0xFF2D2B33) else Color.White
+    val textPrimary = if (isDark) AppColors.Dark.TextPrimary else AppColors.Light.TextPrimary
+    val textSecondary = if (isDark) AppColors.Dark.TextSecondary else AppColors.Light.TextSecondary
+    val surfaceColor = if (isDark) AppColors.Dark.Surface else AppColors.Light.Surface
+    val cardSurface = if (isDark) AppColors.Dark.Card else AppColors.Light.Card
 
     Column(
         modifier = modifier

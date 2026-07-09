@@ -3,21 +3,17 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.yasinmoridi.traptap"
-    compileSdk {
-        version = release(37) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.yasinmoridi.traptap"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -26,9 +22,11 @@ android {
 
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -37,6 +35,9 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 
@@ -49,6 +50,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -57,24 +59,25 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    //data store
+    // Data Store
     implementation(libs.androidx.datastore.preferences)
 
-    //compose navigation
+    // Navigation
     implementation(libs.compose.navigation)
 
-    //icon
+    // Icons
     implementation(libs.androidx.material.icons.extended)
 
-    //room
-    implementation(libs.androidx.room.runtime)
+    // Room
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
 
-    //coroutines
-    implementation(libs.kotlinx.coroutines.core)
+    // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
 
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
+    // Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 }

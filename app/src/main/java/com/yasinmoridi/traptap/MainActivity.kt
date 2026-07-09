@@ -20,17 +20,25 @@ import com.yasinmoridi.traptap.ui.screens.SettingsScreen
 import com.yasinmoridi.traptap.ui.screens.SplashScreen
 import com.yasinmoridi.traptap.ui.theme.TrapTapTheme
 import com.yasinmoridi.traptap.ui.util.PersianStrings
-import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.compose.koinViewModel
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: GameViewModel = viewModel()
+            val viewModel: GameViewModel = koinViewModel()
             val state by viewModel.uiState.collectAsState()
             
+            // Level 2 Trick Detection: If we were on level 2 and app restarted, pass it!
+            LaunchedEffect(state.levels) {
+                val lvl2 = state.levels.find { it.id == 2 }
+                if (lvl2?.state == com.yasinmoridi.traptap.ui.LevelState.Current) {
+                    // This logic triggers when app starts and lvl 2 is current.
+                    // To make it a real "trap", we'd need to save a "trap_started" flag in Room.
+                }
+            }
+
             val layoutDirection = if (state.strings == PersianStrings) {
                 LayoutDirection.Rtl
             } else {
@@ -39,7 +47,6 @@ class MainActivity : ComponentActivity() {
 
             CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
                 TrapTapTheme(darkTheme = state.isDarkMode) {
-                    // یک Scaffold کلی برای کل اپلیکیشن (بجز اسپلش و بازی)
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         bottomBar = {
@@ -93,10 +100,14 @@ class MainActivity : ComponentActivity() {
                                         isAnswered = state.isAnswered,
                                         showHint = state.showHint,
                                         trollMessageIndex = state.trollMessageIndex,
+                                        showSuccessDialog = state.showSuccessDialog,
+                                        exitButtonOffset = state.exitButtonOffset,
                                         onBack = { viewModel.navigateTo(Screen.Levels) },
                                         onOptionSelected = { opt, isCorrect -> viewModel.onOptionSelected(opt, isCorrect) },
                                         onToggleHint = { viewModel.toggleHint() },
                                         onRestart = { viewModel.restartLevel() },
+                                        onNextLevel = { viewModel.onNextLevel() },
+                                        onMoveExitButton = { viewModel.moveExitButton() },
                                         modifier = Modifier.fillMaxSize()
                                     )
                                 }

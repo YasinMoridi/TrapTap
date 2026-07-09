@@ -31,13 +31,17 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 | 🧭 Navigation              | [Compose Navigation](https://developer.android.com/jetpack/compose/navigation)                              |
 | 🔄 Coroutines              | [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines)                                         |
 | 📦 Local Storage           | [Room Database](https://developer.android.com/training/data-storage/room) & DataStore                      |
+| 🧪 Testing                 | [JUnit 4](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbine](https://github.com/cashapp/turbine) (Flow Testing) |
+
+## 🎮 Level Guide
+Need help? Check out the [Full Walkthrough Guide](WALKTHROUGH.md) for solutions to all levels.
 
 ---
 
 ## فارسی
 
 ## 📜 توضیحات  
-**ترپ‌تپ (TrapTap)** که با نام **ترول‌مایند** نیز شناخته می‌شود، یک بازی پازل مدرن و سرگرم‌کننده است که هوش شما را در مقابل یک ترول بازیگوش به چالش می‌کششد.  
+**ترپ‌تپ (TrapTap)** که با نام **ترول‌مایند** نیز شناخته می‌شود، یک بازی پازل مدرن و سرگرم‌کننده است که هوش شما را در مقابل یک ترول بازیگوش به چالش می‌کشد.  
 این برنامه به صورت بومی (Native) برای اندروید با استفاده از **Jetpack Compose** و **Material 3** ساخته شده و رابط کاربری پویا و جذابی را همراه با انیمیشن‌های روان ارائه می‌دهد.  
 پروژه از معماری **MVVM** پیروی می‌کند و از **Koin** برای تزریق وابستگی استفاده می‌کند تا کدی تمیز، قابل تست و مقیاس‌پذیر داشته باشد.
 
@@ -61,6 +65,10 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 | 🧭 ناوبری | [Compose Navigation](https://developer.android.com/jetpack/compose/navigation) |
 | 🔄 کوروتین‌ها | [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) |
 | 📦 ذخیره‌سازی | [Room Database](https://developer.android.com/training/data-storage/room) & DataStore |
+| 🧪 تست‌نویسی | [JUnit 4](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbine](https://github.com/cashapp/turbine) |
+
+## 🎮 راهنمای مراحل
+نیاز به راهنمایی دارید؟ [راهنمای کامل مراحل](WALKTHROUGH.md) را برای حل تمام پازل‌ها چک کنید.
 
 ---
 
@@ -72,8 +80,9 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 3. Sync Gradle and run the `:app` module.
 
 ### 🧪 Testing | تست
-Run the UI tests for the Splash and Game components:
+Run the Unit and UI tests:
 ```bash
+./gradlew test
 ./gradlew connectedAndroidTest
 ```
 

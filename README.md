@@ -9,7 +9,7 @@
 ## 📜 Description  
 **TrapTap** (also known as **TrollMind**) is a cheeky, modern puzzle game designed to challenge your wit against a mischievous troll.  
 Built natively for Android using **Jetpack Compose** and **Material 3**, the app offers a vibrant and interactive UI with smooth animations.  
-The project follows the **MVVM (Model-View-ViewModel)** architecture and utilizes **Dagger Hilt** for robust dependency injection, ensuring the codebase is clean, testable, and scalable.
+The project follows the **MVVM (Model-View-ViewModel)** architecture and utilizes **Koin** for robust dependency injection, ensuring the codebase is clean, testable, and scalable.
 
 ## ✨ Features
 - 😈 **Outsmart the Troll:** Interactive puzzle mechanics with dynamic troll reactions.
@@ -18,7 +18,7 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 - 🌓 **Dynamic Theming:** Seamless switching between Light and Dark modes.
 - 🌐 **Multilingual & RTL:** Full support for English and Persian (Farsi) with automatic RTL layout.
 - 📊 **Progress Tracking:** Level-based progression system with a visual dashboard.
-- 🏗️ **Clean Architecture:** Built with MVVM, StateFlow, and Hilt for a premium development standard.
+- 🏗️ **Clean Architecture:** Built with MVVM, StateFlow, and Koin for a premium development standard.
 
 ## 🛠 Built With
 
@@ -26,7 +26,7 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 |---------------------------|-------------------------------------------------------------------------------------------------------------|
 | 🏛 Architecture            | MVVM (Model-View-ViewModel)                                                                                |
 | 🖼️ UI Framework            | [Jetpack Compose](https://developer.android.com/jetpack/compose) (Material 3)                               |
-| 🛠️ Dependency Injection    | [Dagger Hilt](https://dagger.dev/hilt/)                                                                     |
+| 🛠️ Dependency Injection    | [Koin](https://insert-koin.io/)                                                                            |
 | 🔄 State Management        | StateFlow & SharedFlow                                                                                     |
 | 🧭 Navigation              | [Compose Navigation](https://developer.android.com/jetpack/compose/navigation)                              |
 | 🔄 Coroutines              | [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines)                                         |
@@ -37,9 +37,9 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 ## فارسی
 
 ## 📜 توضیحات  
-**ترپ‌تپ (TrapTap)** که با نام **ترول‌مایند** نیز شناخته می‌شود، یک بازی پازل مدرن و سرگرم‌کننده است که هوش شما را در مقابل یک ترول بازیگوش به چالش می‌کشد.  
+**ترپ‌تپ (TrapTap)** که با نام **ترول‌مایند** نیز شناخته می‌شود، یک بازی پازل مدرن و سرگرم‌کننده است که هوش شما را در مقابل یک ترول بازیگوش به چالش می‌کششد.  
 این برنامه به صورت بومی (Native) برای اندروید با استفاده از **Jetpack Compose** و **Material 3** ساخته شده و رابط کاربری پویا و جذابی را همراه با انیمیشن‌های روان ارائه می‌دهد.  
-پروژه از معماری **MVVM** پیروی می‌کند و از **Dagger Hilt** برای تزریق وابستگی استفاده می‌کند تا کدی تمیز، قابل تست و مقیاس‌پذیر داشته باشد.
+پروژه از معماری **MVVM** پیروی می‌کند و از **Koin** برای تزریق وابستگی استفاده می‌کند تا کدی تمیز، قابل تست و مقیاس‌پذیر داشته باشد.
 
 ## ✨ ویژگی‌ها
 - 😈 **فریب ترول:** مکانیسم‌های تعاملی پازل با واکنش‌های داینامیک ترول.
@@ -48,7 +48,7 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 - 🌓 **تم داینامیک:** جابجایی روان بین حالت‌های تیره (Dark) و روشن (Light).
 - 🌐 **دوزبانه و راست‌چین:** پشتیبانی کامل از زبان‌های انگلیسی و فارسی با چیدمان خودکار RTL.
 - 📊 **پیگیری پیشرفت:** سیستم پیشروی مرحله‌محور با داشبورد بصری.
-- 🏗️ **معماری پاک:** ساخته شده با MVVM، StateFlow و Hilt برای بالاترین استانداردهای توسعه.
+- 🏗️ **معماری پاک:** ساخته شده با MVVM، StateFlow و Koin برای بالاترین استانداردهای توسعه.
 
 ## 🛠 ساخته شده با
 
@@ -56,7 +56,7 @@ The project follows the **MVVM (Model-View-ViewModel)** architecture and utilize
 | :--- | :--- |
 | 🏛 معماری | MVVM (Model-View-ViewModel) |
 | 🖼️ فریم‌ورک UI | [Jetpack Compose](https://developer.android.com/jetpack/compose) (Material 3) |
-| 🛠️ تزریق وابستگی | [Dagger Hilt](https://dagger.dev/hilt/) |
+| 🛠️ تزریق وابستگی | [Koin](https://insert-koin.io/) |
 | 🔄 مدیریت وضعیت | StateFlow & SharedFlow |
 | 🧭 ناوبری | [Compose Navigation](https://developer.android.com/jetpack/compose/navigation) |
 | 🔄 کوروتین‌ها | [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) |

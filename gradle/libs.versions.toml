@@ -13,6 +13,7 @@ datastorePreferences = "1.1.1"
 composeNavigation = "2.8.5"
 materialIconsExtended = "1.7.6"
 kotlinxCoroutines = "1.9.0"
+kotlinxSerialization = "1.7.3"
 room = "2.6.1"
 koin = "4.0.0"
 mockk = "1.13.13"
@@ -38,6 +39,7 @@ compose-navigation = { module = "androidx.navigation:navigation-compose", versio
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 # Room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

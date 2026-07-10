@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yasinmoridi.traptap.ui.Screen
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
+import com.yasinmoridi.traptap.ui.navigation.AppDestination
 import com.yasinmoridi.traptap.ui.theme.PurpleAccent
 import com.yasinmoridi.traptap.ui.util.AppStrings
 
@@ -20,8 +22,8 @@ import com.yasinmoridi.traptap.ui.util.AppStrings
 fun BottomNavigationBar(
     strings: AppStrings,
     isDark: Boolean,
-    currentScreen: Screen,
-    onNavigate: (Screen) -> Unit
+    currentDestination: NavDestination?,
+    onNavigate: (AppDestination) -> Unit
 ) {
     val textSecondary = if (isDark) Color(0xFFE6E1E5).copy(alpha = 0.55f) else Color(0xFF1C1B1F).copy(alpha = 0.5f)
     
@@ -35,10 +37,10 @@ fun BottomNavigationBar(
         BottomNavItem(
             label = strings.home,
             icon = "🏠",
-            active = currentScreen == Screen.Levels,
+            active = currentDestination?.hasRoute<AppDestination.Levels>() == true,
             isDark = isDark,
             textSecondary = textSecondary
-        ) { onNavigate(Screen.Levels) }
+        ) { onNavigate(AppDestination.Levels) }
 
         BottomNavItem(
             label = strings.rewards,
@@ -51,10 +53,10 @@ fun BottomNavigationBar(
         BottomNavItem(
             label = strings.profile,
             icon = "⚙️",
-            active = currentScreen == Screen.Settings,
+            active = currentDestination?.hasRoute<AppDestination.Settings>() == true,
             isDark = isDark,
             textSecondary = textSecondary
-        ) { onNavigate(Screen.Settings) }
+        ) { onNavigate(AppDestination.Settings) }
     }
 }
 

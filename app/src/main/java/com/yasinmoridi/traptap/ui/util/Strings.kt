@@ -8,6 +8,7 @@ data class AppStrings(
     
     // Levels Screen
     val levelsTitle: String,
+    val solvedFormat: String,
     val coins: String,
     val packProgress: String,
     val solvedLabel: String,
@@ -24,13 +25,16 @@ data class AppStrings(
     val question: String,
     val options: List<String>,
     val trollMessages: List<String>,
-    val hintText: String,
+    val simpleHints: Map<Int, String>,
+    val detailedHints: Map<Int, String>,
     val correctMsg: String,
     val wrongMsg: String,
     val trollWatching: String,
     val trapLevelLabel: String,
     val victoryTitle: String,
     val victoryMessage: String,
+    val victoryReward: String,
+    val trollVictoryMessages: List<String>,
     val nextLevel: String,
 
     // Trap specific strings
@@ -57,7 +61,20 @@ data class AppStrings(
     val darkMode: String,
     val lightMode: String,
     val persian: String,
-    val english: String
+    val english: String,
+    
+    // Hint Dialog
+    val hintDialogTitle: String,
+    val hintDialogMessage: String,
+    val buyHint: String,
+    val notEnoughCoins: String,
+    val cancel: String,
+    
+    // New Hint Labels
+    val simpleHintLabel: String,
+    val detailedHintLabel: String,
+    val skipLevelLabel: String,
+    val chooseHintTitle: String
 )
 
 val EnglishStrings = AppStrings(
@@ -66,6 +83,7 @@ val EnglishStrings = AppStrings(
     loading = "Loading puzzles…",
     puzzleBadge = "PUZZLE",
     levelsTitle = "Choose Level",
+    solvedFormat = "%d of %d solved",
     coins = "1,240",
     packProgress = "Pack 1 — Chapter 1",
     solvedLabel = "8 of 20 solved",
@@ -85,13 +103,47 @@ val EnglishStrings = AppStrings(
         "🙈 That's adorably wrong.",
         "😂 My grandma solved it faster."
     ),
-    hintText = "Think about things that have keys… but aren't a lock.",
+    simpleHints = mapOf(
+        1 to "It's about hardware, not iron.",
+        2 to "Look at the corner of your screen.",
+        3 to "Interaction is key.",
+        4 to "Gravity or movement?",
+        5 to "Time is relative.",
+        6 to "One of these is not like the others.",
+        7 to "The sensor knows all.",
+        8 to "System settings matter.",
+        9 to "Environment affects visibility.",
+        10 to "Endurance test.",
+        11 to "Scale it up.",
+        12 to "Persistence pays off."
+    ),
+    detailedHints = mapOf(
+        1 to "The keys are on a keyboard. No physical lock needed.",
+        2 to "The real exit button is the one you usually use to close apps.",
+        3 to "Slide the bar to the maximum right position.",
+        4 to "Literally drag the question box out of the way with your finger.",
+        5 to "Wait for the timer to hit zero, then wait 3 more seconds.",
+        6 to "Click the 'Next Level' button that looks different.",
+        7 to "Physically turn your phone upside down.",
+        8 to "Increase your media volume to the max using side buttons.",
+        9 to "Go somewhere bright or change screen brightness manually.",
+        10 to "Keep your finger pressed on the button for 10 full seconds.",
+        11 to "Use two fingers to 'zoom in' on the door image.",
+        12 to "Tap the button at least 10 times until it 'breaks'."
+    ),
     correctMsg = "🎉 You actually got it right! (Was it a guess?)",
     wrongMsg = "😂 Nope! The troll laughs at you.",
     trollWatching = "The troll is watching you think…",
     trapLevelLabel = "Trap Level",
     victoryTitle = "VICTORY!",
     victoryMessage = "You outsmarted the troll! He's not happy about it.",
+    victoryReward = "You earned %d coins!",
+    trollVictoryMessages = listOf(
+        "😈 Beginner's luck, I'm sure.",
+        "😒 Whatever. You're still not that smart.",
+        "🙄 I let you win this one. Don't get excited.",
+        "👺 Next level will crush your tiny brain."
+    ),
     nextLevel = "Next Level",
     exitAppToWin = "EXIT THE APP TO WIN",
     exitLabel = "EXIT",
@@ -114,7 +166,16 @@ val EnglishStrings = AppStrings(
     darkMode = "Dark Mode",
     lightMode = "Light Mode",
     persian = "Persian",
-    english = "English"
+    english = "English",
+    hintDialogTitle = "Need a Hint?",
+    hintDialogMessage = "The troll is demanding %d coins for a hint. Do you accept?",
+    buyHint = "Buy Hint",
+    notEnoughCoins = "Not enough coins! Go win some.",
+    cancel = "Cancel",
+    simpleHintLabel = "Simple Hint",
+    detailedHintLabel = "Detailed Hint",
+    skipLevelLabel = "Skip Level",
+    chooseHintTitle = "The Troll Offers Help..."
 )
 
 val PersianStrings = AppStrings(
@@ -123,6 +184,7 @@ val PersianStrings = AppStrings(
     loading = "درحال بارگذاری…",
     puzzleBadge = "پازل",
     levelsTitle = "انتخاب مرحله",
+    solvedFormat = "%d از %d حل شده",
     coins = "۱٬۲۴۰",
     packProgress = "بسته ۱ — فصل ۱",
     solvedLabel = "۸ از ۲۰ حل شده",
@@ -142,13 +204,47 @@ val PersianStrings = AppStrings(
         "🙈 اشتباهت بامزه‌ست.",
         "😂 مادربزرگم زودتر حل کرد."
     ),
-    hintText = "به چیزایی فکر کن که کلید دارن ولی قفل نیستن.",
+    simpleHints = mapOf(
+        1 to "به سخت‌افزار فکر کن، نه آهن.",
+        2 to "گوشه صفحه رو نگاه کن.",
+        3 to "تعامل کلید کاره.",
+        4 to "جاذبه یا حرکت؟",
+        5 to "زمان نسبیه.",
+        6 to "یکی از این‌ها مثل بقیه نیست.",
+        7 to "سنسور همه چیز رو می‌دونه.",
+        8 to "تنظیمات سیستم مهمه.",
+        9 to "محیط روی دید تاثیر می‌ذاره.",
+        10 to "تست استقامت.",
+        11 to "بزرگش کن.",
+        12 to "تداوم نتیجه می‌ده."
+    ),
+    detailedHints = mapOf(
+        1 to "کلیدها روی کیبورد هستن. قفل فیزیکی لازم نیست.",
+        2 to "دکمه خروج واقعی همونیه که همیشه باهاش برنامه‌ها رو می‌بندی.",
+        3 to "اسلایدر رو تا آخرین حد به سمت راست بکش.",
+        4 to "واقعاً جعبه سوال رو با انگشتت از سر راه کنار بکش.",
+        5 to "صبر کن تایمر صفر بشه، بعد ۳ ثانیه دیگه هم منتظر بمون.",
+        6 to "روی اون دکمه 'مرحله بعد' که قیافه‌اش فرق داره بزن.",
+        7 to "گوشیتو واقعاً برعکس (سر و ته) کن.",
+        8 to "صدای رسانه رو با دکمه‌های کناری به حداکثر برسون.",
+        9 to "برو یه جای پرنور یا نور صفحه رو دستی زیاد کن.",
+        10 to "انگشتت رو ۱۰ ثانیه کامل روی دکمه نگه دار.",
+        11 to "با دو انگشت روی عکس در 'زوم' کن تا بزرگ شه.",
+        12 to "حداقل ۱۰ بار روی دکمه بزن تا بالاخره 'کم بیاره'. "
+    ),
     correctMsg = "🎉 واقعاً درست جواب دادی! (شانسی بود؟)",
     wrongMsg = "😂 نه! ترول به ریشت می‌خنده.",
     trollWatching = "ترول داره نگاهت می‌کنه…",
     trapLevelLabel = "مرحله ترول",
     victoryTitle = "پیروزی!",
     victoryMessage = "ترول رو شکست دادی! اصلاً خوشحال نیست.",
+    victoryReward = "شما %d سکه جایزه گرفتید!",
+    trollVictoryMessages = listOf(
+        "😈 مطمئنم شانسی بود.",
+        "😒 حالا هر چی. هنوزم اونقدرها باهوش نیستی.",
+        "🙄 این بار رو گذاشتم ببری. ذوق نکن.",
+        "👺 مرحله بعد مغز کوچیکتو منفجر می‌کنه."
+    ),
     nextLevel = "مرحله بعد",
     exitAppToWin = "برای برنده شدن از برنامه خارج شو",
     exitLabel = "خروج",
@@ -171,5 +267,14 @@ val PersianStrings = AppStrings(
     darkMode = "حالت تیره",
     lightMode = "حالت روشن",
     persian = "فارسی",
-    english = "انگلیسی"
+    english = "انگلیسی",
+    hintDialogTitle = "راهنمایی لازم داری؟",
+    hintDialogMessage = "ترول در ازای %d سکه بهت راهنمایی می‌ده. قبول می‌کنی؟",
+    buyHint = "خرید راهنمایی",
+    notEnoughCoins = "سکه کافی نداری! برو برنده شو.",
+    cancel = "لغو",
+    simpleHintLabel = "راهنمایی ساده",
+    detailedHintLabel = "راهنمایی کامل",
+    skipLevelLabel = "رد کردن مرحله",
+    chooseHintTitle = "ترول پیشنهاد کمک میده..."
 )

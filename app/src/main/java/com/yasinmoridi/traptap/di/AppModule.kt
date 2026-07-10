@@ -2,6 +2,7 @@ package com.yasinmoridi.traptap.di
 
 import androidx.room.Room
 import com.yasinmoridi.traptap.data.db.AppDatabase
+import com.yasinmoridi.traptap.data.local.PreferenceManager
 import com.yasinmoridi.traptap.data.repository.GameRepository
 import com.yasinmoridi.traptap.data.repository.GameRepositoryImpl
 import com.yasinmoridi.traptap.ui.GameViewModel
@@ -24,8 +25,11 @@ val appModule = module {
     // DAO
     single { get<AppDatabase>().dao() }
 
+    // DataStore Preference Manager
+    single { PreferenceManager(androidContext()) }
+
     // Repository
-    single<GameRepository> { GameRepositoryImpl(get()) }
+    single<GameRepository> { GameRepositoryImpl(get(), get()) }
 
     // ViewModel
     viewModel { GameViewModel(get(), get()) }

@@ -17,12 +17,4 @@ interface AppDao {
     // آپدیت کردن وضعیت یک مرحله خاص (مثلاً وقتی کاربر برنده می‌شود)
     @Update
     suspend fun updateLevel(level: LevelEntity)
-
-    // گرفتن تنظیمات برنامه (فقط یک ردیف داریم که آی‌دی آن همیشه 0 است)
-    @Query("SELECT * FROM ${AppConstants.TABLE_SETTINGS} WHERE id = 0")
-    fun getSettings(): Flow<SettingsEntity?>
-
-    // ذخیره یا بروزرسانی تنظیمات کاربر
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveSettings(settings: SettingsEntity)
 }

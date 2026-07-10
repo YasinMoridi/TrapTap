@@ -33,7 +33,8 @@ class StandardLevelHandler : LevelHandler {
                     isAnswered = true,
                     // اگر پاسخ اشتباه بود، یک پیام تمسخرآمیز تصادفی انتخاب کن
                     trollMessageIndex = if (!actualIsCorrect) Random.nextInt(state.strings.trollMessages.size) else state.trollMessageIndex,
-                    showSuccessDialog = actualIsCorrect
+                    showSuccessDialog = actualIsCorrect,
+                    victoryTrollMessageIndex = if (actualIsCorrect) Random.nextInt(state.strings.trollVictoryMessages.size) else state.victoryTrollMessageIndex
                 )
                 onUpdate(newState)
             }

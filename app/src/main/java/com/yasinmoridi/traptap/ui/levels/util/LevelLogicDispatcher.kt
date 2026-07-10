@@ -46,7 +46,11 @@ class LevelLogicDispatcher {
             is LevelAction.SliderChanged -> {
                 onUpdate(state.copy(sliderValue = action.value))
                 if (action.value >= 0.9f && levelId == 3) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        sliderValue = action.value,
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 }
             }
             
@@ -56,7 +60,11 @@ class LevelLogicDispatcher {
                 val newY = state.questionOffset.second + action.dy
                 // اگر کارت به اندازه کافی جابجا شده باشد، کاربر برنده می‌شود
                 if ((Math.abs(newX) > 400 || Math.abs(newY) > 400) && levelId == 4) {
-                    onUpdate(state.copy(questionOffset = Pair(newX, newY), showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        questionOffset = Pair(newX, newY), 
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 } else {
                     onUpdate(state.copy(questionOffset = Pair(newX, newY)))
                 }
@@ -65,39 +73,58 @@ class LevelLogicDispatcher {
             // مرحله ۱۲: کلیک زیاد روی دکمه تا خسته شود
             is LevelAction.TiredButtonClick -> {
                 val currentCount = state.buttonTapCount + 1
-                onUpdate(state.copy(buttonTapCount = currentCount))
                 if (currentCount >= 10 && levelId == 12) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        buttonTapCount = currentCount,
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
+                } else {
+                    onUpdate(state.copy(buttonTapCount = currentCount))
                 }
             }
 
             // مرحله ۱۰: نگه داشتن دکمه به مدت طولانی
             is LevelAction.HoldProgress -> {
                 val newProgress = (state.holdProgress + action.delta).coerceIn(0f, 1f)
-                onUpdate(state.copy(holdProgress = newProgress))
                 if (newProgress >= 1f && levelId == 10) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        holdProgress = newProgress,
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
+                } else {
+                    onUpdate(state.copy(holdProgress = newProgress))
                 }
             }
 
             // مرحله ۷: وارونه کردن گوشی
             is LevelAction.GravityChanged -> {
                 if (levelId == 7 && (action.z < -7f || action.y < -7f)) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 }
             }
 
             // مرحله ۸: بالا بردن صدای گوشی تا انتها
             is LevelAction.VolumeChanged -> {
                 if (levelId == 8 && action.current >= action.max) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 }
             }
 
             // مرحله ۹: تغییر نور صفحه (خیلی تاریک یا خیلی روشن)
             is LevelAction.BrightnessChanged -> {
                 if (levelId == 9 && (action.value > 240 || action.value < 15)) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 }
             }
 
@@ -105,7 +132,11 @@ class LevelLogicDispatcher {
             is LevelAction.Pinch -> {
                 onUpdate(state.copy(pinchScale = action.scale))
                 if (action.scale > 2.5f && levelId == 11) {
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        pinchScale = action.scale,
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 }
             }
 

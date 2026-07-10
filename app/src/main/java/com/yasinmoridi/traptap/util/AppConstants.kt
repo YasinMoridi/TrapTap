@@ -2,10 +2,20 @@ package com.yasinmoridi.traptap.util
 
 object AppConstants {
     const val DATABASE_NAME = "traptap.db"
+    const val DATASTORE_NAME = "traptap_prefs"
     
     // Tables
     const val TABLE_LEVELS = "levels"
-    const val TABLE_SETTINGS = "settings"
+
+    // Game Config
+    const val MAX_LEVEL = 12
+    const val INITIAL_COINS = 100
+    const val WIN_REWARD = 50
+    
+    // Hint Costs
+    const val COST_SIMPLE_HINT = 10
+    const val COST_DETAILED_HINT = 25
+    const val COST_SKIP_LEVEL = 60
 
     // Level States
     const val STATE_COMPLETED = "Completed"

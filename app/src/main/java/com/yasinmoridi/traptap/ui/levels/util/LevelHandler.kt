@@ -32,4 +32,6 @@ sealed class LevelAction {
     data class Pinch(val scale: Float) : LevelAction() // حرکت دو انگشتی (Pinch)
     object MoveExitButton : LevelAction() // جابجایی دکمه خروج (تله مرحله ۲)
     object NextLevel : LevelAction() // رفتن به مرحله بعدی
+    object ToggleHintDialog : LevelAction() // نمایش/مخفی کردن دیالوگ خرید راهنمایی
+    data class PurchaseHint(val level: Int) : LevelAction() // خرید راهنمایی (۱: ساده، ۲: کامل، ۳: رد کردن)
 }

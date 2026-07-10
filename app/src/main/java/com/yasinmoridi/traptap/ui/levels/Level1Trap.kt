@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.yasinmoridi.traptap.ui.screens.HintBox
 import com.yasinmoridi.traptap.ui.screens.OptionsList
 import com.yasinmoridi.traptap.ui.screens.PuzzleCard
 import com.yasinmoridi.traptap.ui.util.AppStrings
@@ -23,7 +22,6 @@ fun Level1Trap(
     textPrimary: Color,
     cardSurface: Color,
     isDark: Boolean,
-    showHint: Boolean,
     selectedOption: String?,
     isAnswered: Boolean,
     onOptionSelected: (String, Boolean) -> Unit
@@ -37,11 +35,6 @@ fun Level1Trap(
     ) {
         // نمایش کارت سوال
         PuzzleCard(strings, textPrimary, cardSurface, isDark)
-        
-        // نمایش راهنما در صورت فعال بودن
-        if (showHint) {
-            HintBox(strings.hintText, isDark)
-        }
         
         // نمایش لیست گزینه‌ها
         OptionsList(

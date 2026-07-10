@@ -3,23 +3,9 @@ package com.yasinmoridi.traptap.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,18 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinmoridi.traptap.ui.LevelData
-import com.yasinmoridi.traptap.ui.levels.Level10Trap
-import com.yasinmoridi.traptap.ui.levels.Level11Trap
-import com.yasinmoridi.traptap.ui.levels.Level12Trap
-import com.yasinmoridi.traptap.ui.levels.Level1Trap
-import com.yasinmoridi.traptap.ui.levels.Level2Trap
-import com.yasinmoridi.traptap.ui.levels.Level3Trap
-import com.yasinmoridi.traptap.ui.levels.Level4Trap
-import com.yasinmoridi.traptap.ui.levels.Level5Trap
-import com.yasinmoridi.traptap.ui.levels.Level6Trap
-import com.yasinmoridi.traptap.ui.levels.Level7Trap
-import com.yasinmoridi.traptap.ui.levels.Level8Trap
-import com.yasinmoridi.traptap.ui.levels.Level9Trap
+import com.yasinmoridi.traptap.ui.levels.*
 import com.yasinmoridi.traptap.ui.levels.util.LevelAction
 import com.yasinmoridi.traptap.ui.theme.AppColors
 import com.yasinmoridi.traptap.ui.util.AppStrings
@@ -56,7 +31,12 @@ fun GameScreen(
     selectedOption: String?,
     isAnswered: Boolean,
     showHint: Boolean,
+    unlockedHintLevel: Int,
+    showHintDialog: Boolean,
+    coins: Int,
+    hintCost: Int,
     trollMessageIndex: Int,
+    victoryTrollMessageIndex: Int,
     showSuccessDialog: Boolean,
     exitButtonOffset: Pair<Float, Float>,
     sliderValue: Float,
@@ -78,30 +58,45 @@ fun GameScreen(
     val cardSurface = if (isDark) AppColors.Dark.Card else AppColors.Light.Card
 
     Box(modifier = modifier.fillMaxSize().background(surfaceColor)) {
-        Column(modifier = Modifier.fillMaxSize().statusBarsPadding()) {
-            GameAppBar(strings, level?.id ?: 0, textPrimary, textSecondary, onBack, onRestart)
+        Column(modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
+            GameAppBar(strings, level?.id ?: 0, coins, textPrimary, textSecondary, onBack, onRestart, { onAction(LevelAction.ToggleHintDialog) })
 
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-                // نمایش محتوای اختصاصی برای هر مرحله (تله‌های ترول)
-                when (level?.id) {
-                    1 -> Level1Trap(strings, textPrimary, cardSurface, isDark, showHint, selectedOption, isAnswered) { opt, isCorr -> 
-                        onAction(LevelAction.OptionSelected(opt, isCorr)) 
+                Column(modifier = Modifier.fillMaxSize()) {
+                    // نمایش متن راهنمایی خریداری شده
+                    if (showHint) {
+                        Box(modifier = Modifier.padding(16.dp)) {
+                            val hintText = if (unlockedHintLevel == 1) {
+                                strings.simpleHints[level?.id] ?: ""
+                            } else {
+                                strings.detailedHints[level?.id] ?: ""
+                            }
+                            HintBox(hintText, isDark)
+                        }
                     }
-                    2 -> Level2Trap(strings, textPrimary, exitButtonOffset) { onAction(LevelAction.MoveExitButton) }
-                    3 -> Level3Trap(strings, textPrimary, sliderValue, { onAction(LevelAction.SliderChanged(it)) }) { onAction(LevelAction.OptionSelected("", true)) }
-                    4 -> Level4Trap(strings, textPrimary, cardSurface, isDark, questionOffset) { dx, dy -> onAction(LevelAction.Dragged(dx, dy)) }
-                    5 -> Level5Trap(strings, textPrimary, timer) { onAction(LevelAction.TimerStarted) }
-                    6 -> Level6Trap(strings, textPrimary) { opt, isCorr -> onAction(LevelAction.OptionSelected(opt, isCorr)) }
-                    7 -> Level7Trap(strings, textPrimary)
-                    8 -> Level8Trap(strings, textPrimary)
-                    9 -> Level9Trap(strings, textPrimary)
-                    10 -> Level10Trap(strings, textPrimary, holdProgress) { onAction(LevelAction.HoldProgress(it)) }
-                    11 -> Level11Trap(strings, textPrimary, pinchScale) { onAction(LevelAction.Pinch(it)) }
-                    12 -> Level12Trap(strings, textPrimary, buttonTapCount) { onAction(LevelAction.TiredButtonClick) }
-                    else -> {
-                        // سایر مراحل استاندارد
-                        Level1Trap(strings, textPrimary, cardSurface, isDark, showHint, selectedOption, isAnswered) { opt, isCorr -> 
-                            onAction(LevelAction.OptionSelected(opt, isCorr))
+
+                    Box(modifier = Modifier.weight(1f)) {
+                        // نمایش محتوای اختصاصی برای هر مرحله (تله‌های ترول)
+                        when (level?.id) {
+                            1 -> Level1Trap(strings, textPrimary, cardSurface, isDark, selectedOption, isAnswered) { opt, isCorr -> 
+                                onAction(LevelAction.OptionSelected(opt, isCorr)) 
+                            }
+                            2 -> Level2Trap(strings, textPrimary, exitButtonOffset) { onAction(LevelAction.MoveExitButton) }
+                            3 -> Level3Trap(strings, textPrimary, sliderValue, { onAction(LevelAction.SliderChanged(it)) }) { onAction(LevelAction.OptionSelected("", true)) }
+                            4 -> Level4Trap(strings, textPrimary, cardSurface, isDark, questionOffset) { dx, dy -> onAction(LevelAction.Dragged(dx, dy)) }
+                            5 -> Level5Trap(strings, textPrimary, timer) { onAction(LevelAction.TimerStarted) }
+                            6 -> Level6Trap(strings, textPrimary) { opt, isCorr -> onAction(LevelAction.OptionSelected(opt, isCorr)) }
+                            7 -> Level7Trap(strings, textPrimary)
+                            8 -> Level8Trap(strings, textPrimary)
+                            9 -> Level9Trap(strings, textPrimary)
+                            10 -> Level10Trap(strings, textPrimary, holdProgress) { onAction(LevelAction.HoldProgress(it)) }
+                            11 -> Level11Trap(strings, textPrimary, pinchScale) { onAction(LevelAction.Pinch(it)) }
+                            12 -> Level12Trap(strings, textPrimary, buttonTapCount) { onAction(LevelAction.TiredButtonClick) }
+                            else -> {
+                                Level1Trap(strings, textPrimary, cardSurface, isDark, selectedOption, isAnswered) { opt, isCorr -> 
+                                    onAction(LevelAction.OptionSelected(opt, isCorr))
+                                }
+                            }
                         }
                     }
                 }
@@ -109,33 +104,125 @@ fun GameScreen(
 
             val correctKey = AppConstants.OPTION_KEYS[AppConstants.CORRECT_OPTION_INDEX]
             TrollMessageArea(strings, isAnswered, selectedOption == correctKey, trollMessageIndex, isDark, textSecondary)
-            GameBottomActions(strings, isDark, textSecondary, showHint, onBack, onToggleHint, onRestart)
+            
+            // نوار انتخاب راهنمایی (جایگزین دکمه تک هینت)
+            HintSelectionRow(strings, coins, onPurchase = { onAction(LevelAction.PurchaseHint(it)) })
+            
+            GameBottomActions(strings, isDark, textSecondary, onBack, onRestart)
         }
 
         // نمایش دیالوگ پیروزی در صورت برنده شدن
         if (showSuccessDialog) {
-            SuccessDialog(strings) { onAction(LevelAction.NextLevel) }
+            SuccessDialog(
+                strings = strings,
+                reward = AppConstants.WIN_REWARD,
+                trollMsgIdx = victoryTrollMessageIndex,
+                onNext = { onAction(LevelAction.NextLevel) }
+            )
+        }
+    }
+}
+
+// نوار انتخاب انواع راهنمایی یا رد کردن مرحله (بالای دکمه‌های اصلی)
+@Composable
+fun HintSelectionRow(
+    strings: AppStrings,
+    coins: Int,
+    onPurchase: (Int) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        HintOptionCard(strings.simpleHintLabel, AppConstants.COST_SIMPLE_HINT, coins, 1, Modifier.weight(1f), onPurchase)
+        HintOptionCard(strings.detailedHintLabel, AppConstants.COST_DETAILED_HINT, coins, 2, Modifier.weight(1f), onPurchase)
+        HintOptionCard(strings.skipLevelLabel, AppConstants.COST_SKIP_LEVEL, coins, 3, Modifier.weight(1f), onPurchase)
+    }
+}
+
+@Composable
+fun HintOptionCard(label: String, cost: Int, userCoins: Int, type: Int, modifier: Modifier, onClick: (Int) -> Unit) {
+    val canAfford = userCoins >= cost
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(if (canAfford) AppColors.AmberAccent.copy(alpha = 0.1f) else Color.LightGray.copy(alpha = 0.1f))
+            .border(1.dp, if (canAfford) AppColors.AmberAccent.copy(alpha = 0.3f) else Color.Transparent, RoundedCornerShape(16.dp))
+            .clickable(enabled = canAfford) { onClick(type) }
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = if (canAfford) Color.Unspecified else Color.Gray, textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.height(2.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(AppConstants.ICON_COIN, fontSize = 10.sp)
+            Spacer(modifier = Modifier.width(2.dp))
+            Text(cost.toString(), fontSize = 11.sp, fontWeight = FontWeight.Black, color = if (canAfford) AppColors.AmberDeep else Color.Gray)
         }
     }
 }
 
 //دیالوگ پیروزی که بعد از حل هر مرحله نمایش داده می‌شود
 @Composable
-fun SuccessDialog(strings: AppStrings, onNext: () -> Unit) {
+fun SuccessDialog(strings: AppStrings, reward: Int, trollMsgIdx: Int, onNext: () -> Unit) {
     AlertDialog(
         onDismissRequest = { },
         title = { 
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                Text(AppConstants.ICON_VICTORY, fontSize = 40.sp)
-                Text(strings.victoryTitle, fontWeight = FontWeight.Black)
+                Text(AppConstants.ICON_VICTORY, fontSize = 44.sp)
+                Text(strings.victoryTitle, fontWeight = FontWeight.Black, fontSize = 24.sp, color = AppColors.PurpleAccent)
             }
         },
         text = { 
-            Text(
-                strings.victoryMessage,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) 
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    strings.victoryMessage,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                // نمایش مقدار سکه جایزه گرفته شده
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(AppColors.AmberAccent.copy(alpha = 0.1f))
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(AppConstants.ICON_COIN, fontSize = 18.sp)
+                    Spacer(modifier = Modifier.size(6.dp))
+                    Text(
+                        strings.victoryReward.format(reward),
+                        fontWeight = FontWeight.Bold,
+                        color = AppColors.AmberDeep
+                    )
+                }
+
+                // پیام تمسخرآمیز ترول بعد از پیروزی
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Gray.copy(alpha = 0.05f))
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = strings.trollVictoryMessages[trollMsgIdx],
+                        fontSize = 13.sp,
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.Gray
+                    )
+                }
+            }
         },
         confirmButton = {
             Button(
@@ -144,21 +231,53 @@ fun SuccessDialog(strings: AppStrings, onNext: () -> Unit) {
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = AppColors.PurpleAccent)
             ) {
-                Text(strings.nextLevel)
+                Text(strings.nextLevel, fontWeight = FontWeight.Bold)
             }
         }
     )
 }
 
 @Composable
-fun GameAppBar(strings: AppStrings, levelId: Int, textPrimary: Color, textSecondary: Color, onBack: () -> Unit, onRestart: () -> Unit) {
+fun GameAppBar(
+    strings: AppStrings, 
+    levelId: Int, 
+    coins: Int, 
+    textPrimary: Color, 
+    textSecondary: Color, 
+    onBack: () -> Unit, 
+    onRestart: () -> Unit,
+    onHint: () -> Unit
+) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onBack) { Text(AppConstants.ICON_BACK, fontSize = 24.sp, color = textPrimary) }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("${strings.levelPrefix} $levelId", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = textSecondary)
             Text(strings.trapLevelLabel, fontSize = 16.sp, fontWeight = FontWeight.Black, color = textPrimary)
         }
-        IconButton(onClick = onRestart) { Text(AppConstants.ICON_RESTART, fontSize = 20.sp, color = textPrimary) }
+        
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            IconButton(
+                onClick = onHint,
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(AppColors.AmberAccent.copy(alpha = 0.15f), androidx.compose.foundation.shape.CircleShape)
+            ) { 
+                Text(AppConstants.ICON_HINT, fontSize = 18.sp) 
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(AppColors.AmberAccent.copy(alpha = 0.1f))
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Text(AppConstants.ICON_COIN, fontSize = 14.sp)
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(coins.toString(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = AppColors.AmberDeep)
+            }
+            IconButton(onClick = onRestart) { Text(AppConstants.ICON_RESTART, fontSize = 20.sp, color = textPrimary) }
+        }
     }
 }
 
@@ -238,10 +357,9 @@ fun TrollMessageArea(strings: AppStrings, isAnswered: Boolean, isCorrect: Boolea
 
 //اکشن‌های پایین صفحه بازی
 @Composable
-fun GameBottomActions(strings: AppStrings, isDark: Boolean, textSecondary: Color, showHint: Boolean, onHome: () -> Unit, onHint: () -> Unit, onRestart: () -> Unit) {
+fun GameBottomActions(strings: AppStrings, isDark: Boolean, textSecondary: Color, onHome: () -> Unit, onRestart: () -> Unit) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp), horizontalArrangement = Arrangement.SpaceAround) {
         GameBottomItem(strings.home, AppConstants.ICON_HOME, false, isDark, textSecondary, onHome)
-        GameBottomItem(strings.hint, AppConstants.ICON_HINT, showHint, isDark, textSecondary, onHint)
         GameBottomItem(strings.restart, AppConstants.ICON_RESTART, false, isDark, textSecondary, onRestart)
     }
 }

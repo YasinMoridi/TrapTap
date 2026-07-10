@@ -32,6 +32,7 @@ import com.yasinmoridi.traptap.util.AppConstants
 fun LevelsScreen(
     strings: AppStrings,
     levels: List<LevelData>,
+    coins: Int,
     isDark: Boolean,
     onLevelClick: (LevelData) -> Unit,
     modifier: Modifier = Modifier
@@ -40,16 +41,20 @@ fun LevelsScreen(
     val textSecondary = if (isDark) AppColors.Dark.TextSecondary else AppColors.Light.TextSecondary
     val surfaceColor = if (isDark) AppColors.Dark.Surface else AppColors.Light.Surface
 
+    val solvedCount = levels.count { it.state == LevelState.Completed }
+    val totalCount = levels.size
+    val progress = if (totalCount > 0) solvedCount.toFloat() / totalCount else 0f
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(surfaceColor)
     ) {
         // نوار بالای صفحه شامل عنوان و تعداد سکه‌ها
-        LevelsTopAppBar(strings, textPrimary, isDark)
+        LevelsTopAppBar(strings, coins, textPrimary, isDark)
 
         // بنر نمایش میزان پیشرفت کاربر در فصل جاری
-        ProgressBanner(strings)
+        ProgressBanner(strings, solvedCount, totalCount, progress)
 
         // نمایش مراحل به صورت شبکه‌ای (Grid) با ۴ ستون
         LazyVerticalGrid(
@@ -70,6 +75,7 @@ fun LevelsScreen(
 @Composable
 fun LevelsTopAppBar(
     strings: AppStrings,
+    coins: Int,
     textColor: Color,
     isDark: Boolean
 ) {
@@ -112,14 +118,14 @@ fun LevelsTopAppBar(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(AppConstants.ICON_COIN, fontSize = 14.sp)
-            Text(strings.coins, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, color = AppColors.AmberDeep)
+            Text(coins.toString(), fontSize = 13.sp, fontWeight = FontWeight.ExtraBold, color = AppColors.AmberDeep)
         }
     }
 }
 
-// بنر نمایش پیشرفت (Progress Banner)
+// بنر نمایش پیشرفت (Progress Banner) واقعی شده
 @Composable
-fun ProgressBanner(strings: AppStrings) {
+fun ProgressBanner(strings: AppStrings, solved: Int, total: Int, progress: Float) {
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -136,7 +142,7 @@ fun ProgressBanner(strings: AppStrings) {
             ) {
                 Column {
                     Text(strings.packProgress, fontSize = 11.sp, color = Color.White.copy(alpha = 0.7f), fontWeight = FontWeight.SemiBold)
-                    Text(strings.solvedLabel, fontSize = 13.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(strings.solvedFormat.format(solved, total), fontSize = 13.sp, color = Color.White, fontWeight = FontWeight.Bold)
                 }
                 Box(
                     modifier = Modifier
@@ -157,12 +163,12 @@ fun ProgressBanner(strings: AppStrings) {
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(0.4f)
+                        .fillMaxWidth(progress)
                         .fillMaxHeight()
                         .background(Color.White.copy(alpha = 0.9f), CircleShape)
                 )
             }
-            Text("40%", fontSize = 10.sp, color = Color.White.copy(alpha = 0.6f), modifier = Modifier.padding(top = 4.dp))
+            Text("${(progress * 100).toInt()}%", fontSize = 10.sp, color = Color.White.copy(alpha = 0.6f), modifier = Modifier.padding(top = 4.dp))
         }
     }
 }

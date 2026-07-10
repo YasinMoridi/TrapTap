@@ -2,9 +2,11 @@ package com.yasinmoridi.traptap.ui
 
 import com.yasinmoridi.traptap.ui.util.AppStrings
 import com.yasinmoridi.traptap.ui.util.EnglishStrings
+import com.yasinmoridi.traptap.util.AppConstants
 
 data class GameState(
     val score: Int = 0,
+    val coins: Int = 100,                // تعداد سکه‌های کاربر
     val isDarkMode: Boolean = false,     // وضعیت تم تاریک
     val strings: AppStrings = EnglishStrings, // استرینگ‌های ترجمه شده (فارسی/انگلیسی)
     val currentScreen: Screen = Screen.Splash, // صفحه‌ای که کاربر فعلاً در آن است
@@ -13,7 +15,11 @@ data class GameState(
     val selectedOption: String? = null,        // گزینه‌ای که کاربر انتخاب کرده
     val isAnswered: Boolean = false,           // آیا به سوال پاسخ داده شده؟
     val showHint: Boolean = false,             // نمایش راهنمایی
+    val unlockedHintLevel: Int = 0,            // سطح راهنمایی باز شده (۰: هیچ، ۱: ساده، ۲: کامل)
+    val showHintDialog: Boolean = false,       // نمایش دیالوگ خرید راهنمایی
+    val hintCost: Int = AppConstants.COST_SIMPLE_HINT, // هزینه پایه راهنمایی
     val trollMessageIndex: Int = 0,            // ایندکس پیام‌های مسخره‌آمیز ترول
+    val victoryTrollMessageIndex: Int = 0,    // ایندکس پیام پیروزی ترول
     val showSuccessDialog: Boolean = false,    // نمایش دیالوگ پیروزی
     
     // وضعیت‌های مربوط به مراحل خاص (Traps)

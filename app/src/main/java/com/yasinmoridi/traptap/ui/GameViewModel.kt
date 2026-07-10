@@ -3,7 +3,6 @@ package com.yasinmoridi.traptap.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinmoridi.traptap.data.db.LevelEntity
-import com.yasinmoridi.traptap.data.db.SettingsEntity
 import com.yasinmoridi.traptap.data.repository.GameRepository
 import com.yasinmoridi.traptap.ui.levels.util.LevelAction
 import com.yasinmoridi.traptap.ui.levels.util.LevelLogicDispatcher
@@ -22,10 +21,6 @@ class GameViewModel(
     private val levelLogicDispatcher: LevelLogicDispatcher
 ) : ViewModel() {
 
-    companion object {
-        const val MAX_LEVEL = 12 // حداکثر تعداد مراحل بازی
-    }
-
     // وضعیت داخلی برنامه که فقط در ویومدل قابل تغییر است
     private val _uiState = MutableStateFlow(GameState())
     // وضعیت عمومی که لایه UI فقط می‌تواند آن را بخواند
@@ -37,34 +32,32 @@ class GameViewModel(
         observeLevels()
     }
 
-    /**
-     * گوش دادن به تغییرات تنظیمات (زبان، تم و ...) در دیتابیس.
-     */
+
+     // گوش دادن به تغییرات تنظیمات (زبان، تم و ...) از DataStore
     private fun observeSettings() {
-        repository.getSettings().onEach { entity ->
-            entity?.let {
-                _uiState.update { state ->
-                    state.copy(
-                        isDarkMode = it.isDarkMode,
-                        strings = if (it.language == AppConstants.LANG_FA) PersianStrings else EnglishStrings
-                    )
-                }
-                
-                // بررسی وضعیت خاص مرحله ۲ (تله دکمه خروج)
-                if (it.level2TrapStarted) {
-                    checkLevel2Win()
-                }
-            } ?: run {
-                // اگر تنظیماتی وجود نداشت، زبان سیستم را چک کن
-                val systemLang = java.util.Locale.getDefault().language
-                if (systemLang == AppConstants.LANG_FA) toggleLanguage()
-            }
+        // مشاهده تغییرات تم
+        repository.isDarkMode().onEach { isDark ->
+            _uiState.update { it.copy(isDarkMode = isDark) }
+        }.launchIn(viewModelScope)
+
+        // مشاهده تغییرات زبان
+        repository.getLanguage().onEach { lang ->
+            _uiState.update { it.copy(strings = if (lang == AppConstants.LANG_FA) PersianStrings else EnglishStrings) }
+        }.launchIn(viewModelScope)
+
+        // مشاهده تغییرات سکه
+        repository.getCoins().onEach { coins ->
+            _uiState.update { it.copy(coins = coins) }
+        }.launchIn(viewModelScope)
+
+        // مشاهده وضعیت تله مرحله ۲
+        repository.isLevel2TrapActive().onEach { isActive ->
+            if (isActive) checkLevel2Win()
         }.launchIn(viewModelScope)
     }
 
-    /**
-     * منطق پیروزی در مرحله ۲: اگر کاربر از اپ خارج شده باشد (وضعیت ذخیره شده در دیتابیس).
-     */
+
+     // منطق پیروزی در مرحله ۲: اگر کاربر از اپ خارج شده باشد.
     private fun checkLevel2Win() {
         viewModelScope.launch {
             val levels = repository.getAllLevels().first()
@@ -74,18 +67,14 @@ class GameViewModel(
                 repository.updateLevel(LevelEntity(2, AppConstants.STATE_COMPLETED, 3))
                 repository.updateLevel(LevelEntity(3, AppConstants.STATE_CURRENT))
                 
-                // ریست کردن وضعیت تله در تنظیمات
-                val currentSettings = repository.getSettings().first()
-                currentSettings?.let {
-                    repository.saveSettings(it.copy(level2TrapStarted = false))
-                }
+                // ریست کردن وضعیت تله
+                repository.setLevel2TrapActive(false)
             }
         }
     }
 
-    /**
-     * مشاهده تغییرات مراحل بازی.
-     */
+
+     // مشاهده تغییرات مراحل بازی
     private fun observeLevels() {
         repository.getAllLevels().onEach { entities ->
             if (entities.isEmpty()) {
@@ -101,12 +90,11 @@ class GameViewModel(
         }.launchIn(viewModelScope)
     }
 
-    /**
-     * ساخت مراحل اولیه بازی برای بار اول.
-     */
+
+    // ساخت مراحل اولیه بازی برای بار اول.
     private fun initLevels() {
         viewModelScope.launch {
-            val initial = (1..MAX_LEVEL).map { 
+            val initial = (1..AppConstants.MAX_LEVEL).map { 
                 LevelEntity(it, if (it == 1) AppConstants.STATE_CURRENT else AppConstants.STATE_LOCKED, emoji = when(it) {
                     2 -> "🚪"
                     3 -> "🎚️"
@@ -126,22 +114,28 @@ class GameViewModel(
         }
     }
 
-    /**
-     * مدیریت تمام تعاملات کاربر در بازی.
-     */
+
+    // مدیریت تمام تعاملات کاربر در بازی
     fun handleAction(action: LevelAction) {
-        // مدیریت اکشن‌های خاص که نیاز به دیتابیس دارند
+        // مدیریت اکشن‌های خاص
         when (action) {
             is LevelAction.MoveExitButton -> {
                 viewModelScope.launch {
-                    val settings = repository.getSettings().first() ?: SettingsEntity()
-                    if (!settings.level2TrapStarted) {
-                        repository.saveSettings(settings.copy(level2TrapStarted = true))
+                    if (!repository.isLevel2TrapActive().first()) {
+                        repository.setLevel2TrapActive(true)
                     }
                 }
             }
             is LevelAction.NextLevel -> {
                 onNextLevel()
+                return
+            }
+            is LevelAction.ToggleHintDialog -> {
+                _uiState.update { it.copy(showHintDialog = !it.showHintDialog) }
+                return
+            }
+            is LevelAction.PurchaseHint -> {
+                purchaseHint(action.level)
                 return
             }
             else -> {}
@@ -158,37 +152,35 @@ class GameViewModel(
         )
     }
 
-    /**
-     * تغییر زبان برنامه بین فارسی و انگلیسی.
-     */
+
+     // تغییر زبان برنامه بین فارسی و انگلیسی
     fun toggleLanguage() {
         viewModelScope.launch {
-            val current = repository.getSettings().first() ?: SettingsEntity()
-            val newLang = if (_uiState.value.strings == EnglishStrings) AppConstants.LANG_FA else AppConstants.LANG_EN
-            repository.saveSettings(current.copy(language = newLang))
+            val currentLang = repository.getLanguage().first()
+            val newLang = if (currentLang == AppConstants.LANG_EN) AppConstants.LANG_FA else AppConstants.LANG_EN
+            repository.setLanguage(newLang)
         }
     }
 
-    /**
-     * تغییر تم برنامه (تیره / روشن).
-     */
+
+     // تغییر تم برنامه (تیره / روشن)
     fun toggleTheme() {
         viewModelScope.launch {
-            val current = repository.getSettings().first() ?: SettingsEntity()
-            repository.saveSettings(current.copy(isDarkMode = !current.isDarkMode))
+            val isDark = repository.isDarkMode().first()
+            repository.setDarkMode(!isDark)
         }
     }
 
-    /**
-     * جابجایی بین صفحات مختلف.
-     */
+
+     // جابجایی بین صفحات مختلف
+
     fun navigateTo(screen: Screen) {
         _uiState.update { it.copy(currentScreen = screen, showSuccessDialog = false) }
     }
 
-    /**
-     * انتخاب یک مرحله برای شروع بازی.
-     */
+
+     // انتخاب یک مرحله برای شروع بازی
+
     fun selectLevel(level: LevelData) {
         if (level.state != LevelState.Locked) {
             _uiState.update { 
@@ -198,6 +190,7 @@ class GameViewModel(
                     selectedOption = null,
                     isAnswered = false,
                     showHint = false,
+                    unlockedHintLevel = 0,
                     showSuccessDialog = false,
                     exitButtonOffset = Pair(0f, 0f),
                     sliderValue = 0f,
@@ -210,28 +203,33 @@ class GameViewModel(
                 )
             }
             
-            // تله مرحله ۲: به محض انتخاب مرحله، وضعیت شروع را در تنظیمات ذخیره کن
+            // تله مرحله ۲: به محض انتخاب مرحله، وضعیت شروع را ذخیره کن
             if (level.id == 2) {
                 viewModelScope.launch {
-                    val settings = repository.getSettings().first() ?: SettingsEntity()
-                    repository.saveSettings(settings.copy(level2TrapStarted = true))
+                    repository.setLevel2TrapActive(true)
                 }
             }
         }
     }
 
-    /**
-     * رفتن به مرحله بعدی بعد از پیروزی.
-     */
+
+     // رفتن به مرحله بعدی بعد از پیروزی
     fun onNextLevel() {
         val currentId = _uiState.value.currentLevel?.id ?: return
         viewModelScope.launch {
+            // چک کن اگر اولین بار است که مرحله تمام می‌شود، سکه بده
+            val levels = repository.getAllLevels().first()
+            val currentLevelEntity = levels.find { it.id == currentId }
+            if (currentLevelEntity?.state != AppConstants.STATE_COMPLETED) {
+                addCoins(AppConstants.WIN_REWARD)
+            }
+
             // مارک کردن مرحله فعلی به عنوان تمام شده
             repository.updateLevel(LevelEntity(currentId, AppConstants.STATE_COMPLETED, 3))
             
             // باز کردن مرحله بعدی
             val nextId = currentId + 1
-            if (nextId <= MAX_LEVEL) {
+            if (nextId <= AppConstants.MAX_LEVEL) {
                 repository.updateLevel(LevelEntity(nextId, AppConstants.STATE_CURRENT))
                 val nextLevel = _uiState.value.levels.find { it.id == nextId }?.copy(state = LevelState.Current)
                 _uiState.update { 
@@ -240,6 +238,8 @@ class GameViewModel(
                         showSuccessDialog = false, 
                         isAnswered = false, 
                         selectedOption = null,
+                        showHint = false,
+                        showHintDialog = false,
                         exitButtonOffset = Pair(0f, 0f),
                         sliderValue = 0f,
                         questionOffset = Pair(0f, 0f),
@@ -257,16 +257,51 @@ class GameViewModel(
         }
     }
 
-    /**
-     * نمایش یا مخفی کردن راهنمایی مرحله.
-     */
+
+     // اضافه کردن سکه
+
+    private fun addCoins(amount: Int) {
+        viewModelScope.launch {
+            val currentCoins = repository.getCoins().first()
+            repository.saveCoins(currentCoins + amount)
+        }
+    }
+
+     // خرید راهنمایی یا رد کردن مرحله با سکه
+    private fun purchaseHint(purchaseType: Int) {
+        viewModelScope.launch {
+            val currentCoins = repository.getCoins().first()
+            val cost = when (purchaseType) {
+                1 -> AppConstants.COST_SIMPLE_HINT
+                2 -> AppConstants.COST_DETAILED_HINT
+                3 -> AppConstants.COST_SKIP_LEVEL
+                else -> 0
+            }
+
+            if (currentCoins >= cost) {
+                repository.saveCoins(currentCoins - cost)
+                when (purchaseType) {
+                    1 -> _uiState.update { it.copy(showHint = true, unlockedHintLevel = 1, showHintDialog = false) }
+                    2 -> _uiState.update { it.copy(showHint = true, unlockedHintLevel = 2, showHintDialog = false) }
+                    3 -> {
+                        _uiState.update { it.copy(showHintDialog = false) }
+                        onNextLevel() // رد کردن مرحله
+                    }
+                }
+            } else {
+                _uiState.update { it.copy(showHintDialog = false) }
+            }
+        }
+    }
+
+
+     // نمایش یا مخفی کردن راهنمایی مرحله
     fun toggleHint() {
         _uiState.update { it.copy(showHint = !it.showHint) }
     }
 
-    /**
-     * شروع مجدد مرحله فعلی و ریست کردن تمام وضعیت‌ها.
-     */
+
+     // شروع مجدد مرحله فعلی و ریست کردن تمام وضعیت‌ها
     fun restartLevel() {
         _uiState.update { 
             it.copy(

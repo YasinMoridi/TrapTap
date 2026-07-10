@@ -4,6 +4,7 @@ import com.yasinmoridi.traptap.ui.GameState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
 // در این مرحله کاربر باید تا پایان تایمر و چند ثانیه بعد از آن صبر کند تا برنده شود
@@ -34,7 +35,10 @@ class Level5Handler : LevelHandler {
                     // بعد از اینکه تایمر به صفر رسید، ۳ ثانیه دیگه هم کاربر رو منتظر بذار (تله نهایی!)
                     delay(3000.milliseconds)
                     // حالا دیالوگ پیروزی رو نشون بده
-                    onUpdate(state.copy(showSuccessDialog = true))
+                    onUpdate(state.copy(
+                        showSuccessDialog = true,
+                        victoryTrollMessageIndex = Random.nextInt(state.strings.trollVictoryMessages.size)
+                    ))
                 }
             }
             else -> {}

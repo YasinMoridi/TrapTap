@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yasinmoridi.traptap.ui.GameViewModel
+import com.yasinmoridi.traptap.ui.levels.util.LevelAction
 import com.yasinmoridi.traptap.ui.screens.GameScreen
 import com.yasinmoridi.traptap.ui.screens.LevelsScreen
 import com.yasinmoridi.traptap.ui.screens.SettingsScreen
@@ -51,6 +52,7 @@ fun SetUpNavGraph(
             LevelsScreen(
                 strings = state.strings,
                 levels = state.levels,
+                coins = state.coins,
                 isDark = state.isDarkMode,
                 onLevelClick = { level ->
                     // انتخاب مرحله و رفتن به صفحه بازی
@@ -70,7 +72,12 @@ fun SetUpNavGraph(
                 selectedOption = state.selectedOption,
                 isAnswered = state.isAnswered,
                 showHint = state.showHint,
+                unlockedHintLevel = state.unlockedHintLevel,
+                showHintDialog = state.showHintDialog,
+                coins = state.coins,
+                hintCost = state.hintCost,
                 trollMessageIndex = state.trollMessageIndex,
+                victoryTrollMessageIndex = state.victoryTrollMessageIndex,
                 showSuccessDialog = state.showSuccessDialog,
                 exitButtonOffset = state.exitButtonOffset,
                 sliderValue = state.sliderValue,
@@ -81,7 +88,7 @@ fun SetUpNavGraph(
                 pinchScale = state.pinchScale,
                 onBack = { navController.popBackStack() }, // بازگشت به صفحه قبل
                 onAction = { viewModel.handleAction(it) }, // ارسال اکشن‌های بازی به ویومدل
-                onToggleHint = { viewModel.toggleHint() },
+                onToggleHint = { viewModel.handleAction(LevelAction.ToggleHintDialog) },
                 onRestart = { viewModel.restartLevel() },
                 modifier = Modifier.fillMaxSize()
             )

@@ -8,6 +8,29 @@ import com.yasinmoridi.traptap.ui.levels.util.LevelAction
 import com.yasinmoridi.traptap.ui.levels.util.LevelLogicDispatcher
 import com.yasinmoridi.traptap.ui.util.EnglishStrings
 import com.yasinmoridi.traptap.ui.util.PersianStrings
+import com.yasinmoridi.traptap.ui.util.ChineseStrings
+import com.yasinmoridi.traptap.ui.util.RussianStrings
+import com.yasinmoridi.traptap.ui.util.GermanStrings
+import com.yasinmoridi.traptap.ui.util.HindiStrings
+import com.yasinmoridi.traptap.ui.util.ArabicStrings
+import com.yasinmoridi.traptap.ui.util.FrenchStrings
+import com.yasinmoridi.traptap.ui.util.SpanishStrings
+import com.yasinmoridi.traptap.ui.util.HebrewStrings
+import com.yasinmoridi.traptap.ui.util.TurkishStrings
+import com.yasinmoridi.traptap.ui.util.VietnameseStrings
+import com.yasinmoridi.traptap.ui.util.PortugueseStrings
+import com.yasinmoridi.traptap.ui.util.JapaneseStrings
+import com.yasinmoridi.traptap.ui.util.KoreanStrings
+import com.yasinmoridi.traptap.ui.util.ItalianStrings
+import com.yasinmoridi.traptap.ui.util.IndonesianStrings
+import com.yasinmoridi.traptap.ui.util.ThaiStrings
+import com.yasinmoridi.traptap.ui.util.PolishStrings
+import com.yasinmoridi.traptap.ui.util.DutchStrings
+import com.yasinmoridi.traptap.ui.util.UkrainianStrings
+import com.yasinmoridi.traptap.ui.util.CzechStrings
+import com.yasinmoridi.traptap.ui.util.RomanianStrings
+import com.yasinmoridi.traptap.ui.util.HungarianStrings
+import com.yasinmoridi.traptap.ui.util.SwedishStrings
 import com.yasinmoridi.traptap.util.AppConstants
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -42,7 +65,34 @@ class GameViewModel(
 
         // مشاهده تغییرات زبان
         repository.getLanguage().onEach { lang ->
-            _uiState.update { it.copy(strings = if (lang == AppConstants.LANG_FA) PersianStrings else EnglishStrings) }
+            val strings = when (lang) {
+                AppConstants.LANG_FA -> PersianStrings
+                AppConstants.LANG_ZH -> ChineseStrings
+                AppConstants.LANG_RU -> RussianStrings
+                AppConstants.LANG_DE -> GermanStrings
+                AppConstants.LANG_HI -> HindiStrings
+                AppConstants.LANG_AR -> ArabicStrings
+                AppConstants.LANG_FR -> FrenchStrings
+                AppConstants.LANG_ES -> SpanishStrings
+                AppConstants.LANG_HE -> HebrewStrings
+                AppConstants.LANG_TR -> TurkishStrings
+                AppConstants.LANG_VI -> VietnameseStrings
+                AppConstants.LANG_PT -> PortugueseStrings
+                AppConstants.LANG_JA -> JapaneseStrings
+                AppConstants.LANG_KO -> KoreanStrings
+                AppConstants.LANG_IT -> ItalianStrings
+                AppConstants.LANG_ID -> IndonesianStrings
+                AppConstants.LANG_TH -> ThaiStrings
+                AppConstants.LANG_PL -> PolishStrings
+                AppConstants.LANG_NL -> DutchStrings
+                AppConstants.LANG_UK -> UkrainianStrings
+                AppConstants.LANG_CS -> CzechStrings
+                AppConstants.LANG_RO -> RomanianStrings
+                AppConstants.LANG_HU -> HungarianStrings
+                AppConstants.LANG_SV -> SwedishStrings
+                else -> EnglishStrings
+            }
+            _uiState.update { it.copy(strings = strings) }
         }.launchIn(viewModelScope)
 
         // مشاهده تغییرات سکه
@@ -153,12 +203,21 @@ class GameViewModel(
     }
 
 
-     // تغییر زبان برنامه بین فارسی و انگلیسی
+    // تنظیم زبان برنامه
+    fun setLanguage(lang: String) {
+        viewModelScope.launch {
+            repository.setLanguage(lang)
+        }
+    }
+
+    // تغییر زبان برنامه (چرخش بین زبان‌ها)
     fun toggleLanguage() {
         viewModelScope.launch {
+            val languages = AppConstants.AVAILABLE_LANGUAGES
             val currentLang = repository.getLanguage().first()
-            val newLang = if (currentLang == AppConstants.LANG_EN) AppConstants.LANG_FA else AppConstants.LANG_EN
-            repository.setLanguage(newLang)
+            val currentIndex = languages.indexOf(currentLang)
+            val nextIndex = (currentIndex + 1) % languages.size
+            repository.setLanguage(languages[nextIndex])
         }
     }
 

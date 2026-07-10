@@ -38,6 +38,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import com.yasinmoridi.traptap.ui.theme.TrapTapTheme
 import com.yasinmoridi.traptap.ui.util.PersianStrings
+import com.yasinmoridi.traptap.ui.util.ArabicStrings
+import com.yasinmoridi.traptap.ui.util.HebrewStrings
 import com.yasinmoridi.traptap.util.AppConstants
 import org.koin.android.ext.android.inject
 
@@ -95,8 +97,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
             val state by viewModel.uiState.collectAsState()
             
-            // تنظیم جهت صفحه (RTL برای فارسی، LTR برای انگلیسی)
-            val layoutDirection = if (state.strings == PersianStrings) {
+            // تنظیم جهت صفحه (RTL برای فارسی، عربی و عبری، LTR برای بقیه)
+            val layoutDirection = if (state.strings == PersianStrings || state.strings == ArabicStrings || state.strings == HebrewStrings) {
                 LayoutDirection.Rtl
             } else {
                 LayoutDirection.Ltr

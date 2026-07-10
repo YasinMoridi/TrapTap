@@ -100,7 +100,7 @@ fun SetUpNavGraph(
                 strings = state.strings,
                 isDark = state.isDarkMode,
                 onToggleTheme = { viewModel.toggleTheme() },
-                onToggleLanguage = { viewModel.toggleLanguage() },
+                onLanguageSelect = { langCode -> viewModel.setLanguage(langCode) },
                 modifier = Modifier.fillMaxSize()
             )
         }

@@ -28,6 +28,37 @@ object AppConstants {
     // Language
     const val LANG_EN = "en"
     const val LANG_FA = "fa"
+    const val LANG_ZH = "zh"
+    const val LANG_RU = "ru"
+    const val LANG_DE = "de"
+    const val LANG_HI = "hi"
+    const val LANG_AR = "ar"
+    const val LANG_FR = "fr"
+    const val LANG_ES = "es"
+    const val LANG_HE = "he"
+    const val LANG_TR = "tr"
+    const val LANG_VI = "vi"
+    const val LANG_PT = "pt"
+    const val LANG_JA = "ja"
+    const val LANG_KO = "ko"
+    const val LANG_IT = "it"
+    const val LANG_ID = "id"
+    const val LANG_TH = "th"
+    const val LANG_PL = "pl"
+    const val LANG_NL = "nl"
+    const val LANG_UK = "uk"
+    const val LANG_CS = "cs"
+    const val LANG_RO = "ro"
+    const val LANG_HU = "hu"
+    const val LANG_SV = "sv"
+
+    val AVAILABLE_LANGUAGES = listOf(
+        LANG_EN, LANG_FA, LANG_ZH, LANG_RU, LANG_DE, LANG_HI,
+        LANG_AR, LANG_FR, LANG_ES, LANG_HE, LANG_TR, LANG_VI,
+        LANG_PT, LANG_JA, LANG_KO, LANG_IT, LANG_ID, LANG_TH,
+        LANG_PL, LANG_NL, LANG_UK, LANG_CS, LANG_RO, LANG_HU,
+        LANG_SV
+    )
 
     // Game Actions
     const val ACTION_GIVE_UP = "GiveUp"

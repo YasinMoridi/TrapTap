@@ -273,13 +273,13 @@ class GameViewModel(
 
 
      // رفتن به مرحله بعدی بعد از پیروزی
-    fun onNextLevel() {
+    fun onNextLevel(giveReward: Boolean = true) {
         val currentId = _uiState.value.currentLevel?.id ?: return
         viewModelScope.launch {
             // چک کن اگر اولین بار است که مرحله تمام می‌شود، سکه بده
             val levels = repository.getAllLevels().first()
             val currentLevelEntity = levels.find { it.id == currentId }
-            if (currentLevelEntity?.state != AppConstants.STATE_COMPLETED) {
+            if (giveReward && currentLevelEntity?.state != AppConstants.STATE_COMPLETED) {
                 addCoins(AppConstants.WIN_REWARD)
             }
 
@@ -344,7 +344,7 @@ class GameViewModel(
                     2 -> _uiState.update { it.copy(showHint = true, unlockedHintLevel = 2, showHintDialog = false) }
                     3 -> {
                         _uiState.update { it.copy(showHintDialog = false) }
-                        onNextLevel() // رد کردن مرحله
+                        onNextLevel(giveReward = false) // رد کردن مرحله
                     }
                 }
             } else {

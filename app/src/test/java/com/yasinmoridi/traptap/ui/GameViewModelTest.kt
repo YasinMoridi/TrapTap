@@ -2,8 +2,8 @@ package com.yasinmoridi.traptap.ui
 
 import app.cash.turbine.test
 import com.yasinmoridi.traptap.data.db.LevelEntity
-import com.yasinmoridi.traptap.data.db.SettingsEntity
 import com.yasinmoridi.traptap.data.repository.GameRepository
+import com.yasinmoridi.traptap.ui.levels.util.LevelLogicDispatcher
 import com.yasinmoridi.traptap.ui.util.EnglishStrings
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -21,6 +21,7 @@ class GameViewModelTest {
 
     private lateinit var viewModel: GameViewModel
     private val repository: GameRepository = mockk(relaxed = true)
+    private val dispatcher: LevelLogicDispatcher = mockk(relaxed = true)
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
@@ -28,10 +29,12 @@ class GameViewModelTest {
         Dispatchers.setMain(testDispatcher)
         
         // Default mocks
-        coEvery { repository.getSettings() } returns flowOf(SettingsEntity(isDarkMode = false, language = "en"))
+        coEvery { repository.getLanguage() } returns flowOf("en")
+        coEvery { repository.isDarkMode() } returns flowOf(false)
+        coEvery { repository.getCoins() } returns flowOf(100)
         coEvery { repository.getAllLevels() } returns flowOf(listOf(LevelEntity(1, "Current")))
         
-        viewModel = GameViewModel(repository)
+        viewModel = GameViewModel(repository, dispatcher)
     }
 
     @After

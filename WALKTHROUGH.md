@@ -12,7 +12,7 @@ Welcome to the official walkthrough for **TrollMind**. If you're stuck, use the 
 | **1** | Riddle | Select **"Keyboard"**. |
 | **2** | Exit Trap | Tap "EXIT" (it moves). Press your phone's **Home button**, then return to the app. |
 | **3** | Slider | Drag the slider to the **far right** and click the secret "NEXT" button. |
-| **4** | Hidden | **Drag the entire puzzle card** away to find the answer underneath. |
+| **4** | Hidden | **Drag the entire puzzle card** away to find the answer underneath (**"KEYBOARD"**). |
 | **5** | Patience | Wait for the timer (10s), then **wait 3 more seconds** without touching. |
 | **6** | Give Up | Don't answer. Click the big red **"GIVE UP"** button. |
 | **7** | Flip | **Flip your phone face-down** or turn it upside down (180°). |
@@ -31,7 +31,7 @@ Welcome to the official walkthrough for **TrollMind**. If you're stuck, use the 
 | **۱** | معما | گزینه **«کیبورد»** را انتخاب کنید. |
 | **۲** | تله خروج | روی «خروج» بزنید (فرار می‌کند). دکمه **هوم گوشی** را بزنید و دوباره برگردید. |
 | **۳** | نوار لغزنده | اسلایدر را تا **آخرین حد سمت راست** بکشید و روی دکمه مخفی کلیک کنید. |
-| **۴** | پنهان | **کارت پازل را با انگشت کنار بکشید** تا جواب مخفی زیر آن پیدا شود. |
+| **۴** | پنهان | **کارت پازل را با انگشت کنار بکشید** تا جواب مخفی زیر آن (**«کیبورد»**) پیدا شود. |
 | **۵** | صبر | صبر کنید تایمر تمام شود، سپس **۳ ثانیه دیگر** به چیزی دست نزنید. |
 | **۶** | تسلیم | سوال را حل نکنید؛ فقط روی دکمه قرمز **«تسلیم می‌شوم»** بزنید. |
 | **۷** | چرخش | گوشی را **به پشت روی میز بگذارید** یا آن را کاملاً سر و ته کنید. |

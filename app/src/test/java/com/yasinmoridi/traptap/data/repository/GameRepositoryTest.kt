@@ -2,6 +2,7 @@ package com.yasinmoridi.traptap.data.repository
 
 import com.yasinmoridi.traptap.data.db.AppDao
 import com.yasinmoridi.traptap.data.db.LevelEntity
+import com.yasinmoridi.traptap.data.local.PreferenceManager
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,10 +13,11 @@ class GameRepositoryTest {
 
     private lateinit var repository: GameRepository
     private val dao: AppDao = mockk(relaxed = true)
+    private val prefs: PreferenceManager = mockk(relaxed = true)
 
     @Before
     fun setup() {
-        repository = GameRepositoryImpl(dao)
+        repository = GameRepositoryImpl(dao, prefs)
     }
 
     @Test

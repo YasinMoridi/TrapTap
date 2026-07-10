@@ -41,12 +41,12 @@ import com.yasinmoridi.traptap.ui.util.PersianStrings
 import com.yasinmoridi.traptap.ui.util.ArabicStrings
 import com.yasinmoridi.traptap.ui.util.HebrewStrings
 import com.yasinmoridi.traptap.util.AppConstants
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
  //اکتیویتی اصلی برنامه که مسئول راه‌اندازی سنسورها، مدیریت صدا و رندر کردن رابط کاربری است
 class MainActivity : ComponentActivity(), SensorEventListener {
-    // تزریق ویومدل با استفاده از Koin
-    private val viewModel: GameViewModel by inject()
+    // تزریق ویومدل با استفاده از Koin (با قابلیت بقا هنگام چرخش صفحه)
+    private val viewModel: GameViewModel by viewModel()
     
     // مدیریت سنسورها برای مراحل خاص (مانند شتاب‌سنج)
     private lateinit var sensorManager: SensorManager

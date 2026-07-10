@@ -149,18 +149,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                                         holdProgress = state.holdProgress,
                                         pinchScale = state.pinchScale,
                                         onBack = { viewModel.navigateTo(Screen.Levels) },
-                                        onOptionSelected = { opt, isCorrect -> viewModel.onOptionSelected(opt, isCorrect) },
+                                        onAction = { viewModel.handleAction(it) },
                                         onToggleHint = { viewModel.toggleHint() },
                                         onRestart = { viewModel.restartLevel() },
-                                        onNextLevel = { viewModel.onNextLevel() },
-                                        onMoveExitButton = { viewModel.moveExitButton() },
-                                        onUpdateSlider = { viewModel.updateSlider(it) },
-                                        onUpdateQuestionOffset = { dx, dy -> viewModel.updateQuestionOffset(dx, dy) },
-                                        onStartTimer = { viewModel.startLevel5Timer() },
-                                        onTiredButtonClick = { viewModel.onTiredButtonClick() },
-                                        onUpdateHoldProgress = { viewModel.updateHoldProgress(it) },
-                                        onPinch = { viewModel.onPinch(it) },
-                                        onWinLevel = { viewModel.winLevel() },
                                         modifier = Modifier.fillMaxSize()
                                     )
                                 }

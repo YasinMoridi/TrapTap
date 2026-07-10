@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yasinmoridi.traptap.ui.LevelData
 import com.yasinmoridi.traptap.ui.theme.AppColors
-import com.yasinmoridi.traptap.ui.theme.PurpleAccent
 import com.yasinmoridi.traptap.ui.util.AppStrings
 import kotlin.math.roundToInt
+import com.yasinmoridi.traptap.ui.levels.LevelAction
 
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -49,18 +49,9 @@ fun GameScreen(
     holdProgress: Float,
     pinchScale: Float,
     onBack: () -> Unit,
-    onOptionSelected: (String, Boolean) -> Unit,
+    onAction: (LevelAction) -> Unit,
     onToggleHint: () -> Unit,
     onRestart: () -> Unit,
-    onNextLevel: () -> Unit,
-    onMoveExitButton: () -> Unit,
-    onUpdateSlider: (Float) -> Unit,
-    onUpdateQuestionOffset: (Float, Float) -> Unit,
-    onStartTimer: () -> Unit,
-    onTiredButtonClick: () -> Unit,
-    onUpdateHoldProgress: (Float) -> Unit,
-    onPinch: (Float) -> Unit,
-    onWinLevel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val textPrimary = if (isDark) AppColors.Dark.TextPrimary else AppColors.Light.TextPrimary
@@ -74,17 +65,17 @@ fun GameScreen(
 
             Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
                 when (level?.id) {
-                    2 -> Level2Trap(strings, textPrimary, exitButtonOffset, onMoveExitButton)
-                    3 -> Level3Trap(strings, textPrimary, sliderValue, onUpdateSlider, onWinLevel)
-                    4 -> Level4Trap(strings, textPrimary, cardSurface, isDark, questionOffset, onUpdateQuestionOffset)
-                    5 -> Level5Trap(strings, textPrimary, timer, onStartTimer)
-                    6 -> Level6Trap(strings, textPrimary, onOptionSelected)
+                    2 -> Level2Trap(strings, textPrimary, exitButtonOffset) { onAction(LevelAction.MoveExitButton) }
+                    3 -> Level3Trap(strings, textPrimary, sliderValue, { onAction(LevelAction.SliderChanged(it)) }) { onAction(LevelAction.OptionSelected("", true)) }
+                    4 -> Level4Trap(strings, textPrimary, cardSurface, isDark, questionOffset) { dx, dy -> onAction(LevelAction.Dragged(dx, dy)) }
+                    5 -> Level5Trap(strings, textPrimary, timer) { onAction(LevelAction.TimerStarted) }
+                    6 -> Level6Trap(strings, textPrimary) { opt, isCorr -> onAction(LevelAction.OptionSelected(opt, isCorr)) }
                     7 -> Level7Trap(strings, textPrimary)
                     8 -> Level8Trap(strings, textPrimary)
                     9 -> Level9Trap(strings, textPrimary)
-                    10 -> Level10Trap(strings, textPrimary, holdProgress, onUpdateHoldProgress)
-                    11 -> Level11Trap(strings, textPrimary, pinchScale, onPinch)
-                    12 -> Level12Trap(strings, textPrimary, buttonTapCount, onTiredButtonClick)
+                    10 -> Level10Trap(strings, textPrimary, holdProgress) { onAction(LevelAction.HoldProgress(it)) }
+                    11 -> Level11Trap(strings, textPrimary, pinchScale) { onAction(LevelAction.Pinch(it)) }
+                    12 -> Level12Trap(strings, textPrimary, buttonTapCount) { onAction(LevelAction.TiredButtonClick) }
                     else -> {
                         Column(
                             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp),
@@ -92,7 +83,9 @@ fun GameScreen(
                         ) {
                             PuzzleCard(strings, textPrimary, cardSurface, isDark)
                             if (showHint) HintBox(strings.hintText, isDark)
-                            OptionsList(strings.options, selectedOption, isAnswered, textPrimary, isDark, onOptionSelected)
+                            OptionsList(strings.options, selectedOption, isAnswered, textPrimary, isDark) { opt, isCorr -> 
+                                onAction(LevelAction.OptionSelected(opt, isCorr)) 
+                            }
                         }
                     }
                 }
@@ -103,7 +96,7 @@ fun GameScreen(
         }
 
         if (showSuccessDialog) {
-            SuccessDialog(strings, onNextLevel)
+            SuccessDialog(strings) { onAction(LevelAction.NextLevel) }
         }
     }
 }
@@ -169,7 +162,6 @@ fun Level4Trap(strings: AppStrings, textColor: Color, surface: Color, isDark: Bo
                 .pointerInput(Unit) {
                     detectDragGestures { change, dragAmount ->
                         change.consume()
-                        // Send the delta (dragAmount) instead of absolute position to avoid jitter
                         onUpdate(dragAmount.x, dragAmount.y)
                     }
                 }
@@ -321,7 +313,7 @@ fun Level11Trap(strings: AppStrings, textColor: Color, scale: Float, onScale: (F
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Box(modifier = Modifier.size((100 * scale).dp).background(AppColors.PurpleAccent, RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.size((100 * scale).dp).background(Color(0xFF8E24AA), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
                 Text("🚪", fontSize = (40 * scale).sp)
             }
         }
@@ -372,9 +364,9 @@ fun GameAppBar(strings: AppStrings, levelId: Int, textPrimary: Color, textSecond
 
 @Composable
 fun PuzzleCard(strings: AppStrings, textColor: Color, surface: Color, isDark: Boolean) {
-    Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(32.dp)).background(surface).border(1.dp, if (isDark) AppColors.Dark.Border else AppColors.PurpleAccent.copy(alpha = 0.1f), RoundedCornerShape(32.dp)).padding(24.dp)) {
+    Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(32.dp)).background(surface).border(1.dp, if (isDark) Color.DarkGray else Color.LightGray.copy(alpha = 0.5f), RoundedCornerShape(32.dp)).padding(24.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier.size(52.dp).background(AppColors.PurpleAccent.copy(alpha = 0.1f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) { Text("🧩", fontSize = 26.sp) }
+            Box(modifier = Modifier.size(52.dp).background(Color(0xFF8E24AA).copy(alpha = 0.1f), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) { Text("🧩", fontSize = 26.sp) }
             Spacer(modifier = Modifier.height(12.dp))
             Text(text = strings.question, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = textColor, textAlign = TextAlign.Center, lineHeight = 24.sp)
         }
@@ -383,9 +375,9 @@ fun PuzzleCard(strings: AppStrings, textColor: Color, surface: Color, isDark: Bo
 
 @Composable
 fun HintBox(hintText: String, isDark: Boolean) {
-    Row(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(AppColors.AmberAccent.copy(alpha = 0.12f)).border(1.5.dp, AppColors.AmberAccent.copy(alpha = 0.35f), RoundedCornerShape(20.dp)).padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    Row(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(Color(0xFFFFBF00).copy(alpha = 0.12f)).border(1.5.dp, Color(0xFFFFBF00).copy(alpha = 0.35f), RoundedCornerShape(20.dp)).padding(16.dp), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("💡", fontSize = 18.sp)
-        Text(text = hintText, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = if (isDark) AppColors.Dark.HintText else AppColors.Light.HintText, modifier = Modifier.weight(1f))
+        Text(text = hintText, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = if (isDark) Color.White else Color.Black, modifier = Modifier.weight(1f))
     }
 }
 
@@ -395,10 +387,10 @@ fun OptionsList(options: List<String>, selectedOption: String?, isAnswered: Bool
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         options.forEachIndexed { index, text ->
             val key = optionKeys[index]; val isSelected = selectedOption == key; val isCorrect = key == "A"
-            val bg = when { isAnswered && isSelected -> if (isCorrect) AppColors.SuccessGreen.copy(alpha = 0.15f) else AppColors.OrangeAccent.copy(alpha = 0.12f); !isAnswered && isSelected -> AppColors.PurpleAccent.copy(alpha = 0.15f); else -> if (isDark) AppColors.Dark.BottomItemBg else AppColors.Light.OptionBg }
-            val border = when { isAnswered && isSelected -> if (isCorrect) AppColors.SuccessGreen else AppColors.OrangeAccent; !isAnswered && isSelected -> AppColors.PurpleAccent; else -> if (isDark) AppColors.Dark.Border else AppColors.PurpleAccent.copy(alpha = 0.15f) }
+            val bg = when { isAnswered && isSelected -> if (isCorrect) Color(0xFF4CAF50).copy(alpha = 0.15f) else Color(0xFFFF5722).copy(alpha = 0.12f); !isAnswered && isSelected -> Color(0xFF8E24AA).copy(alpha = 0.15f); else -> if (isDark) Color(0xFF1E1E1E) else Color.White }
+            val border = when { isAnswered && isSelected -> if (isCorrect) Color(0xFF4CAF50) else Color(0xFFFF5722); !isAnswered && isSelected -> Color(0xFF8E24AA); else -> if (isDark) Color.DarkGray else Color(0xFF8E24AA).copy(alpha = 0.15f) }
             Row(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(bg).border(1.5.dp, border, RoundedCornerShape(20.dp)).clickable(enabled = !isAnswered) { onOptionSelected(key, isCorrect) }.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(modifier = Modifier.size(32.dp).background(if (isAnswered && isSelected) (if (isCorrect) AppColors.SuccessGreen else AppColors.OrangeAccent) else AppColors.PurpleAccent.copy(alpha = 0.15f), RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) { Text(if (isAnswered && isSelected) (if (isCorrect) "✓" else "✗") else key, fontWeight = FontWeight.Black, fontSize = 13.sp, color = if (isAnswered && isSelected) Color.White else AppColors.PurpleAccent) }
+                Box(modifier = Modifier.size(32.dp).background(if (isAnswered && isSelected) (if (isCorrect) Color(0xFF4CAF50) else Color(0xFFFF5722)) else Color(0xFF8E24AA).copy(alpha = 0.15f), RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) { Text(if (isAnswered && isSelected) (if (isCorrect) "✓" else "✗") else key, fontWeight = FontWeight.Black, fontSize = 13.sp, color = if (isAnswered && isSelected) Color.White else Color(0xFF8E24AA)) }
                 Text(text, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = textPrimary)
             }
         }
@@ -407,11 +399,11 @@ fun OptionsList(options: List<String>, selectedOption: String?, isAnswered: Bool
 
 @Composable
 fun TrollMessageArea(strings: AppStrings, isAnswered: Boolean, isCorrect: Boolean, trollMsgIdx: Int, isDark: Boolean, textSecondary: Color) {
-    val bg = when { isAnswered -> if (isCorrect) AppColors.SuccessGreen.copy(alpha = 0.1f) else AppColors.OrangeAccent.copy(alpha = 0.1f); else -> if (isDark) AppColors.Dark.BottomItemBg else AppColors.PurpleAccent.copy(alpha = 0.06f) }
-    val border = if (isAnswered) (if (isCorrect) AppColors.SuccessGreen.copy(alpha = 0.3f) else AppColors.OrangeAccent.copy(alpha = 0.3f)) else Color.Transparent
+    val bg = when { isAnswered -> if (isCorrect) Color(0xFF4CAF50).copy(alpha = 0.1f) else Color(0xFFFF5722).copy(alpha = 0.1f); else -> if (isDark) Color(0xFF1E1E1E) else Color(0xFF8E24AA).copy(alpha = 0.06f) }
+    val border = if (isAnswered) (if (isCorrect) Color(0xFF4CAF50).copy(alpha = 0.3f) else Color(0xFFFF5722).copy(alpha = 0.3f)) else Color.Transparent
     Box(modifier = Modifier.padding(16.dp).fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(bg).border(1.5.dp, border, RoundedCornerShape(20.dp)).padding(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("😈", fontSize = 22.sp); Text(text = if (isAnswered) (if (isCorrect) strings.correctMsg else strings.trollMessages[trollMsgIdx]) else strings.trollWatching, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (isAnswered) (if (isCorrect) (if (isDark) AppColors.SuccessGreenLight else AppColors.SuccessGreenDark) else AppColors.OrangeAccent) else textSecondary, lineHeight = 18.sp)
+            Text("😈", fontSize = 22.sp); Text(text = if (isAnswered) (if (isCorrect) strings.correctMsg else strings.trollMessages[trollMsgIdx]) else strings.trollWatching, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (isAnswered) (if (isCorrect) Color(0xFF81C784) else Color(0xFFFF5722)) else textSecondary, lineHeight = 18.sp)
         }
     }
 }
@@ -428,7 +420,7 @@ fun GameBottomActions(strings: AppStrings, isDark: Boolean, textSecondary: Color
 @Composable
 fun GameBottomItem(label: String, icon: String, active: Boolean, isDark: Boolean, textSecondary: Color, onClick: () -> Unit) {
     Column(modifier = Modifier.clickable { onClick() }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Box(modifier = Modifier.size(width = 44.dp, height = 32.dp).background(if (active) AppColors.AmberAccent.copy(alpha = 0.15f) else (if (isDark) AppColors.Dark.BottomItemBg else AppColors.Light.BottomItemBg), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) { Text(icon, fontSize = 16.sp) }
-        Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = if (active) AppColors.AmberDeep else textSecondary)
+        Box(modifier = Modifier.size(width = 44.dp, height = 32.dp).background(if (active) Color(0xFFFFBF00).copy(alpha = 0.15f) else (if (isDark) Color(0xFF1E1E1E) else Color(0xFFF5F5F5)), RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) { Text(icon, fontSize = 16.sp) }
+        Text(label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = if (active) Color(0xFFFFA000) else textSecondary)
     }
 }

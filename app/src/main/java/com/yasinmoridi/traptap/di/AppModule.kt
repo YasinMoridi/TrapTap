@@ -26,5 +26,8 @@ val appModule = module {
     single<GameRepository> { GameRepositoryImpl(get()) }
 
     // ViewModel
-    viewModel { GameViewModel(get()) }
+    viewModel { GameViewModel(get(), get()) }
+
+    // Utils
+    single { com.yasinmoridi.traptap.ui.levels.LevelLogicDispatcher() }
 }

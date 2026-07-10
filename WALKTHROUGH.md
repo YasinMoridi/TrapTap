@@ -1,4 +1,4 @@
-# 🎮 TrapTap Level Guide | راهنمای کامل مراحل ترپ‌تپ
+# 🎮 TrpTap Level Guide | راهنمای کامل مراحل ترپ‌تپ
 
 Welcome to the official walkthrough for **TrollMind**. If you're stuck, use the tables below to outsmart the troll!  
 به راهنمای رسمی **ترول‌مایند** خوش آمدید. اگر جایی گیر کردید، از جدول‌های زیر برای فریب دادن ترول استفاده کنید!

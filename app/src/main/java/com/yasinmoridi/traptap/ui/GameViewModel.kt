@@ -5,14 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.yasinmoridi.traptap.data.db.LevelEntity
 import com.yasinmoridi.traptap.data.db.SettingsEntity
 import com.yasinmoridi.traptap.data.repository.GameRepository
+import com.yasinmoridi.traptap.ui.levels.LevelAction
+import com.yasinmoridi.traptap.ui.levels.LevelLogicDispatcher
 import com.yasinmoridi.traptap.ui.util.EnglishStrings
 import com.yasinmoridi.traptap.ui.util.PersianStrings
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class GameViewModel(
-    private val repository: GameRepository
+    private val repository: GameRepository,
+    private val levelLogicDispatcher: LevelLogicDispatcher
 ) : ViewModel() {
 
     companion object {
@@ -98,6 +100,34 @@ class GameViewModel(
         }
     }
 
+    fun handleAction(action: LevelAction) {
+        // Special case for repository actions
+        when (action) {
+            is LevelAction.MoveExitButton -> {
+                viewModelScope.launch {
+                    val settings = repository.getSettings().first() ?: SettingsEntity()
+                    if (!settings.level2TrapStarted) {
+                        repository.saveSettings(settings.copy(level2TrapStarted = true))
+                    }
+                }
+            }
+            is LevelAction.NextLevel -> {
+                onNextLevel()
+                return
+            }
+            else -> {}
+        }
+
+        levelLogicDispatcher.dispatch(
+            action = action,
+            state = _uiState.value,
+            scope = viewModelScope,
+            onUpdate = { newState ->
+                _uiState.value = newState
+            }
+        )
+    }
+
     fun toggleLanguage() {
         viewModelScope.launch {
             val current = repository.getSettings().first() ?: SettingsEntity()
@@ -127,7 +157,14 @@ class GameViewModel(
                     isAnswered = false,
                     showHint = false,
                     showSuccessDialog = false,
-                    exitButtonOffset = Pair(0f, 0f)
+                    exitButtonOffset = Pair(0f, 0f),
+                    sliderValue = 0f,
+                    questionOffset = Pair(0f, 0f),
+                    timer = 10,
+                    isTimerRunning = false,
+                    buttonTapCount = 0,
+                    holdProgress = 0f,
+                    pinchScale = 1f
                 )
             }
             
@@ -141,118 +178,6 @@ class GameViewModel(
         }
     }
 
-    fun onOptionSelected(option: String, isCorrect: Boolean) {
-        if (_uiState.value.isAnswered) return
-        
-        // Special case for Level 6: "Give Up" is actually correct
-        val actualIsCorrect = if (_uiState.value.currentLevel?.id == 6) {
-            option == "GiveUp"
-        } else {
-            isCorrect
-        }
-
-        _uiState.update { 
-            it.copy(
-                selectedOption = option,
-                isAnswered = true,
-                trollMessageIndex = if (!actualIsCorrect) Random.nextInt(it.strings.trollMessages.size) else it.trollMessageIndex
-            )
-        }
-        
-        if (actualIsCorrect) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    // New Trap Actions
-    fun updateSlider(value: Float) {
-        _uiState.update { it.copy(sliderValue = value) }
-        if (value >= 0.9f && _uiState.value.currentLevel?.id == 3) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    fun updateQuestionOffset(dx: Float, dy: Float) {
-        _uiState.update { state ->
-            val newX = state.questionOffset.first + dx
-            val newY = state.questionOffset.second + dy
-            
-            // Win condition for Level 4: Move it far enough to reveal the secret
-            if ((Math.abs(newX) > 400 || Math.abs(newY) > 400) && state.currentLevel?.id == 4) {
-                state.copy(questionOffset = Pair(newX, newY), showSuccessDialog = true)
-            } else {
-                state.copy(questionOffset = Pair(newX, newY))
-            }
-        }
-    }
-
-    fun startLevel5Timer() {
-        if (_uiState.value.isTimerRunning) return
-        _uiState.update { it.copy(isTimerRunning = true, timer = 10) }
-        viewModelScope.launch {
-            while (_uiState.value.timer > 0) {
-                kotlinx.coroutines.delay(1000)
-                _uiState.update { it.copy(timer = it.timer - 1) }
-            }
-            // After timer hits 0, wait 3 more seconds
-            kotlinx.coroutines.delay(3000)
-            if (_uiState.value.currentLevel?.id == 5) {
-                _uiState.update { it.copy(showSuccessDialog = true) }
-            }
-        }
-    }
-
-    fun onTiredButtonClick() {
-        val currentCount = _uiState.value.buttonTapCount + 1
-        _uiState.update { it.copy(buttonTapCount = currentCount) }
-        if (currentCount >= 10 && _uiState.value.currentLevel?.id == 12) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    fun updateHoldProgress(delta: Float) {
-        val newProgress = (_uiState.value.holdProgress + delta).coerceIn(0f, 1f)
-        _uiState.update { it.copy(holdProgress = newProgress) }
-        if (newProgress >= 1f && _uiState.value.currentLevel?.id == 10) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    fun onGravityChanged(x: Float, y: Float, z: Float) {
-        // Level 7: Flipped upside down (Z negative) or turned 180 deg (Y negative)
-        // Lowering threshold to -7f for better sensitivity
-        if (_uiState.value.currentLevel?.id == 7) {
-            if (z < -7f || y < -7f) {
-                _uiState.update { it.copy(showSuccessDialog = true) }
-            }
-        }
-    }
-
-    fun onVolumeChanged(current: Int, max: Int) {
-        // Checking if volume is at least 90% of max to be less strict
-        if (current >= max && _uiState.value.currentLevel?.id == 8) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    fun onBrightnessChanged(value: Int) {
-        // value is typically 0-255. If it's near max or min
-        if ((value > 240 || value < 15) && _uiState.value.currentLevel?.id == 9) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    fun onPinch(scale: Float) {
-        _uiState.update { it.copy(pinchScale = scale) }
-        if (scale > 2.5f && _uiState.value.currentLevel?.id == 11) {
-            _uiState.update { it.copy(showSuccessDialog = true) }
-        }
-    }
-
-    fun winLevel() {
-        _uiState.update { it.copy(showSuccessDialog = true) }
-    }
-
     fun onNextLevel() {
         val currentId = _uiState.value.currentLevel?.id ?: return
         viewModelScope.launch {
@@ -264,29 +189,25 @@ class GameViewModel(
             if (nextId <= MAX_LEVEL) {
                 repository.updateLevel(LevelEntity(nextId, "Current"))
                 val nextLevel = _uiState.value.levels.find { it.id == nextId }?.copy(state = LevelState.Current)
-                _uiState.update { it.copy(currentLevel = nextLevel, showSuccessDialog = false, isAnswered = false, selectedOption = null) }
+                _uiState.update { 
+                    it.copy(
+                        currentLevel = nextLevel, 
+                        showSuccessDialog = false, 
+                        isAnswered = false, 
+                        selectedOption = null,
+                        exitButtonOffset = Pair(0f, 0f),
+                        sliderValue = 0f,
+                        questionOffset = Pair(0f, 0f),
+                        timer = 10,
+                        isTimerRunning = false,
+                        buttonTapCount = 0,
+                        holdProgress = 0f,
+                        pinchScale = 1f
+                    ) 
+                }
             } else {
                 navigateTo(Screen.Levels)
             }
-        }
-    }
-
-    // Level 2 Trap Logic
-    fun moveExitButton() {
-        viewModelScope.launch {
-            val settings = repository.getSettings().first() ?: SettingsEntity()
-            if (!settings.level2TrapStarted) {
-                repository.saveSettings(settings.copy(level2TrapStarted = true))
-            }
-        }
-
-        _uiState.update { 
-            it.copy(
-                exitButtonOffset = Pair(
-                    Random.nextInt(-250, 250).toFloat(),
-                    Random.nextInt(-400, 400).toFloat()
-                )
-            )
         }
     }
 
@@ -300,8 +221,29 @@ class GameViewModel(
                 selectedOption = null,
                 isAnswered = false,
                 showHint = false,
-                showSuccessDialog = false
+                showSuccessDialog = false,
+                exitButtonOffset = Pair(0f, 0f),
+                sliderValue = 0f,
+                questionOffset = Pair(0f, 0f),
+                timer = 10,
+                isTimerRunning = false,
+                buttonTapCount = 0,
+                holdProgress = 0f,
+                pinchScale = 1f
             )
         }
+    }
+
+    // Keep these for sensors/volume for now as they are called from MainActivity
+    fun onGravityChanged(x: Float, y: Float, z: Float) {
+        handleAction(LevelAction.GravityChanged(x, y, z))
+    }
+
+    fun onVolumeChanged(current: Int, max: Int) {
+        handleAction(LevelAction.VolumeChanged(current, max))
+    }
+
+    fun onBrightnessChanged(value: Int) {
+        handleAction(LevelAction.BrightnessChanged(value))
     }
 }

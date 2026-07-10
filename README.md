@@ -1,103 +1,53 @@
 # 👹 TrapTap (TrollMind) | ترپ‌تپ (ترول‌مایند)
 
-[English](#english) | [فارسی](#فارسی)
+Welcome to the official repository of **TrapTap**. Please choose your preferred language to read the documentation:
+
+| Language | Document | Language | Document |
+| :--- | :--- | :--- | :--- |
+| 🇺🇸 **English** | [Read Here](locales/README.en.md) | 🇮🇷 **فارسی** | [مطالعه کنید](locales/README.fa.md) |
+| 🇨🇳 **中文** | [点击阅读](locales/README.zh.md) | 🇪🇸 **Español** | [Leer aquí](locales/README.es.md) |
+| 🇫🇷 **Français** | [Lire ici](locales/README.fr.md) | 🇷🇺 **Русский** | [Читать здесь](locales/README.ru.md) |
+| 🇸🇦 **العربية** | [اقرأ هنا](locales/README.ar.md) | 🇩🇪 **Deutsch** | [Hier lesen](locales/README.de.md) |
+| 🇮🇳 **हिन्दी** | [यहाँ पढ़ें](locales/README.hi.md) | 🇹🇷 **Türkçe** | [Buradan okuyun](locales/README.tr.md) |
+| 🇯🇵 **日本語** | [ここを読む](locales/README.ja.md) | 🇰🇷 **한국어** | [여기에서 읽기](locales/README.ko.md) |
+| 🇧🇷 **Português** | [Leia aqui](locales/README.pt.md) | 🇮🇹 **Italiano** | [Leggi qui](locales/README.it.md) |
+| 🇻🇳 **Tiếng Việt** | [Đọc tại đây](locales/README.vi.md) | 🇮🇩 **Bahasa Indonesia** | [Baca di sini](locales/README.id.md) |
+| 🇹🇭 **ไทย** | [อ่านที่นี่](locales/README.th.md) | 🇵🇱 **Polski** | [Przeczytaj tutaj](locales/README.pl.md) |
+| 🇳🇱 **Nederlands** | [Lees hier](locales/README.nl.md) | 🇺🇦 **Українська** | [Читати тут](locales/README.uk.md) |
+| 🇨🇿 **Čeština** | [Čtěte zde](locales/README.cs.md) | 🇷🇴 **Română** | [Citește aici](locales/README.ro.md) |
+| 🇭🇺 **Magyar** | [Itt olvasható](locales/README.hu.md) | 🇸🇪 **Svenska** | [Läs här](locales/README.sv.md) |
+| 🇮🇱 **עברית** | [קרא כאן](locales/README.he.md) | | |
 
 ---
 
-## English
-
-## 📜 Description  
-**TrapTap** (also known as **TrollMind**) is a cheeky, modern puzzle game designed to challenge your wit against a mischievous troll.  
-Built natively for Android using **Jetpack Compose** and **Material 3**, the app offers a vibrant and interactive UI with smooth animations.  
-The project follows the **MVVM (Model-View-ViewModel)** architecture and utilizes **Koin** for robust dependency injection, ensuring the codebase is clean, testable, and scalable.
-
-## ✨ Features
-- 😈 **Outsmart the Troll:** Interactive puzzle mechanics with dynamic troll reactions.
-- 🎨 **Material 3 UI:** Modern, responsive design based on high-fidelity Figma mocks.
-- ⚡ **Advanced Animations:** Custom-rendered SVG Mascot with Float and Pulse animations.
-- 🌓 **Dynamic Theming:** Seamless switching between Light and Dark modes.
-- 🌐 **Multilingual & RTL:** Full support for English and Persian (Farsi) with automatic RTL layout.
-- 📊 **Progress Tracking:** Level-based progression system with a visual dashboard.
-- 🏗️ **Clean Architecture:** Built with MVVM, StateFlow, and Koin for a premium development standard.
-
-## 🛠 Built With
-
-| Category                  | Technology                                                                                                  |
-|---------------------------|-------------------------------------------------------------------------------------------------------------|
-| 🏛 Architecture            | MVVM (Model-View-ViewModel)                                                                                |
-| 🖼️ UI Framework            | [Jetpack Compose](https://developer.android.com/jetpack/compose) (Material 3)                               |
-| 🛠️ Dependency Injection    | [Koin](https://insert-koin.io/)                                                                            |
-| 🔄 State Management        | StateFlow & SharedFlow                                                                                     |
-| 🧭 Navigation              | [Compose Navigation](https://developer.android.com/jetpack/compose/navigation)                              |
-| 🔄 Coroutines              | [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines)                                         |
-| 📦 Local Storage           | [Room Database](https://developer.android.com/training/data-storage/room) & DataStore                      |
-| 🧪 Testing                 | [JUnit 4](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbine](https://github.com/cashapp/turbine) (Flow Testing) |
-
-## 🎮 Level Guide
-Need help? Check out the [Full Walkthrough Guide](WALKTHROUGH.md) for solutions to all levels.
-
----
-
-## فارسی
-
-## 📜 توضیحات  
-**ترپ‌تپ (TrapTap)** که با نام **ترول‌مایند** نیز شناخته می‌شود، یک بازی پازل مدرن و سرگرم‌کننده است که هوش شما را در مقابل یک ترول بازیگوش به چالش می‌کشد.  
-این برنامه به صورت بومی (Native) برای اندروید با استفاده از **Jetpack Compose** و **Material 3** ساخته شده و رابط کاربری پویا و جذابی را همراه با انیمیشن‌های روان ارائه می‌دهد.  
-پروژه از معماری **MVVM** پیروی می‌کند و از **Koin** برای تزریق وابستگی استفاده می‌کند تا کدی تمیز، قابل تست و مقیاس‌پذیر داشته باشد.
-
-## ✨ ویژگی‌ها
-- 😈 **فریب ترول:** مکانیسم‌های تعاملی پازل با واکنش‌های داینامیک ترول.
-- 🎨 **رابط کاربری متریال ۳:** طراحی مدرن و پاسخگو بر اساس طرح‌های فیگما با جزئیات بالا.
-- ⚡ **انیمیشن‌های پیشرفته:** مسکات ترول با رندر اختصاصی SVG و انیمیشن‌های Float و Pulse.
-- 🌓 **تم داینامیک:** جابجایی روان بین حالت‌های تیره (Dark) و روشن (Light).
-- 🌐 **دوزبانه و راست‌چین:** پشتیبانی کامل از زبان‌های انگلیسی و فارسی با چیدمان خودکار RTL.
-- 📊 **پیگیری پیشرفت:** سیستم پیشروی مرحله‌محور با داشبورد بصری.
-- 🏗️ **معماری پاک:** ساخته شده با MVVM، StateFlow و Koin برای بالاترین استانداردهای توسعه.
-
-## 🛠 ساخته شده با
-
-| دسته‌بندی | تکنولوژی |
-| :--- | :--- |
-| 🏛 معماری | MVVM (Model-View-ViewModel) |
-| 🖼️ فریم‌ورک UI | [Jetpack Compose](https://developer.android.com/jetpack/compose) (Material 3) |
-| 🛠️ تزریق وابستگی | [Koin](https://insert-koin.io/) |
-| 🔄 مدیریت وضعیت | StateFlow & SharedFlow |
-| 🧭 ناوبری | [Compose Navigation](https://developer.android.com/jetpack/compose/navigation) |
-| 🔄 کوروتین‌ها | [Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines) |
-| 📦 ذخیره‌سازی | [Room Database](https://developer.android.com/training/data-storage/room) & DataStore |
-| 🧪 تست‌نویسی | [JUnit 4](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbine](https://github.com/cashapp/turbine) |
-
-## 🎮 راهنمای مراحل
-نیاز به راهنمایی دارید؟ [راهنمای کامل مراحل](WALKTHROUGH.md) را برای حل تمام پازل‌ها چک کنید.
-
----
-
-## 🚀 Development | توسعه
-
-### 🛠 Run the App | اجرای برنامه
+## 🚀 Quick Start | شروع سریع
+If you want to run the project immediately:
 1. Clone the repository.
-2. Open the project in **Android Studio Ladybug** or newer.
-3. Sync Gradle and run the `:app` module.
+2. Open in **Android Studio Ladybug**+.
+3. Sync Gradle and run `:app`.
 
-### 🧪 Testing | تست
-Run the Unit and UI tests:
+## 🧪 Testing | تست
+Run the Unit and UI tests | اجرای تست‌های واحد و رابط کاربری:
 ```bash
 ./gradlew test
 ./gradlew connectedAndroidTest
 ```
 
-## 📱 Screenshots | اسکرین‌شات‌ها
+## 🎮 Level Guide | راهنمای مراحل
+Need help? Check out the [Full Walkthrough Guide](WALKTHROUGH.md) for solutions to all levels.  
+نیاز به راهنمایی دارید؟ [راهنمای کامل مراحل](WALKTHROUGH.md) را برای حل تمام پازل‌ها چک کنید.
 
+## 📱 Screenshots | اسکرین‌شات‌ها
 <table style="width:100%">
   <tr>
-    <th>Splash Screen</th>
-    <th>Levels Grid</th> 
-    <th>Game UI</th> 
+    <th align="center">Splash Screen</th>
+    <th align="center">Levels Grid</th> 
+    <th align="center">Game UI</th> 
   </tr>
   <tr>
-    <td><img src="screenshot/splash.png" width=240/></td> 
-    <td><img src="screenshot/levels.png" width=240/></td>
-    <td><img src="screenshot/game.png" width=240/></td>
+    <td align="center"><img src="screenshot/splash.png" width=240/></td> 
+    <td align="center"><img src="screenshot/levels.png" width=240/></td>
+    <td align="center"><img src="screenshot/game.png" width=240/></td>
   </tr>
 </table>
 

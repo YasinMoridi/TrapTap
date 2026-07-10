@@ -15,6 +15,8 @@ import com.yasinmoridi.traptap.ui.theme.AppColors
 import com.yasinmoridi.traptap.ui.util.AppStrings
 import com.yasinmoridi.traptap.ui.util.PersianStrings
 
+
+// صفحه تنظیمات برنامه
 @Composable
 fun SettingsScreen(
     strings: AppStrings,
@@ -33,7 +35,7 @@ fun SettingsScreen(
             .fillMaxSize()
             .background(surfaceColor)
     ) {
-        // Header
+        // بخش سربرگ (Header)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -54,7 +56,7 @@ fun SettingsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Language Setting
+            // تنظیمات مربوط به زبان برنامه
             SettingsCard(cardSurface, isDark) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -69,13 +71,14 @@ fun SettingsScreen(
                             color = textSecondary
                         )
                     }
+                    // دکمه تغییر زبان
                     Button(onClick = onToggleLanguage) {
-                        Text(if (strings == PersianStrings) "English" else "فارسی")
+                        Text(if (strings == PersianStrings) strings.english else strings.persian)
                     }
                 }
             }
 
-            // Theme Setting
+            // تنظیمات مربوط به تم برنامه (تیره/روشن)
             SettingsCard(cardSurface, isDark) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -90,6 +93,7 @@ fun SettingsScreen(
                             color = textSecondary
                         )
                     }
+                    // سوییچ برای فعال/غیرفعال کردن حالت شب
                     Switch(
                         checked = isDark,
                         onCheckedChange = { onToggleTheme() }
@@ -100,6 +104,7 @@ fun SettingsScreen(
     }
 }
 
+// قالب کلی برای کارت‌های تنظیمات
 @Composable
 fun SettingsCard(surface: Color, isDark: Boolean, content: @Composable () -> Unit) {
     Surface(

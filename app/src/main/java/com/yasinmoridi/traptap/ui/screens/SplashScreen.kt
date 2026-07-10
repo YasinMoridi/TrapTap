@@ -23,6 +23,10 @@ import androidx.compose.ui.unit.sp
 import com.yasinmoridi.traptap.ui.components.TrollMascot
 import com.yasinmoridi.traptap.ui.theme.*
 import com.yasinmoridi.traptap.ui.util.AppStrings
+import com.yasinmoridi.traptap.util.AppConstants
+
+
+// این صفحه هنگام باز شدن برنامه نمایش داده می‌شود و شامل انیمیشن‌های لودینگ است
 
 @Composable
 fun SplashScreen(
@@ -34,6 +38,7 @@ fun SplashScreen(
     var progress by remember { mutableStateOf(0f) }
     var timeElapsed by remember { mutableStateOf(false) }
 
+    // انیمیشن پالس (ضربان) پشت کاراکتر ترول
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val pulseScale by infiniteTransition.animateFloat(
         initialValue = 0.8f,
@@ -54,6 +59,7 @@ fun SplashScreen(
         label = "pulseAlpha"
     )
 
+    // انیمیشن شناور بودن (Floating) کاراکتر ترول
     val floatOffset by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = -8f,
@@ -64,6 +70,7 @@ fun SplashScreen(
         label = "float"
     )
 
+    // شبیه‌سازی لودینگ با پیشرفت تدریجی در ۴ ثانیه
     LaunchedEffect(Unit) {
         val animationDuration = 4000
         val startTime = System.currentTimeMillis()
@@ -74,11 +81,13 @@ fun SplashScreen(
         }
     }
 
+    // حداقل زمان نمایش صفحه اسپلش (۵ ثانیه)
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(5000)
         timeElapsed = true
     }
 
+    // هدایت به صفحه بعد پس از اتمام لودینگ و زمان مشخص شده
     LaunchedEffect(progress, timeElapsed) {
         if (progress >= 1f && timeElapsed) {
             onFinished()
@@ -99,6 +108,7 @@ fun SplashScreen(
             .background(Brush.linearGradient(bgColors)),
         contentAlignment = Alignment.Center
     ) {
+        // رسم نقاط پس‌زمینه (Pattern)
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,6 +127,7 @@ fun SplashScreen(
                 }
         )
 
+        // نمایش لکه‌های رنگی (Blobs) در پس‌زمینه
         Blob(
             color = PurpleAccent.copy(alpha = 0.3f),
             size = 240.dp,
@@ -133,7 +144,9 @@ fun SplashScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+            // بخش آیکون و انیمیشن ترول
             Box(contentAlignment = Alignment.Center) {
+                // دایره انیمیشنی پشت ترول
                 Box(
                     modifier = Modifier
                         .size(140.dp)
@@ -145,6 +158,7 @@ fun SplashScreen(
                         .background(PurpleAccent.copy(alpha = 0.5f), CircleShape)
                 )
                 
+                // کاراکتر ترول با افکت شناور
                 Box(
                     modifier = Modifier
                         .offset(y = floatOffset.dp)
@@ -159,6 +173,7 @@ fun SplashScreen(
                 }
             }
 
+            // نام و نشان برنامه
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = strings.appName,
@@ -176,7 +191,7 @@ fun SplashScreen(
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "${strings.puzzleBadge} 🧩",
+                        text = "${strings.puzzleBadge} ${AppConstants.ICON_DEFAULT_PUZZLE}",
                         color = Color.White,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold
@@ -184,6 +199,7 @@ fun SplashScreen(
                 }
             }
 
+            // شعار برنامه
             Text(
                 text = strings.tagline,
                 color = textColor.copy(alpha = 0.7f),
@@ -192,6 +208,7 @@ fun SplashScreen(
                 modifier = Modifier.padding(horizontal = 40.dp)
             )
 
+            // نوار لودینگ و متن وضعیت
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -216,6 +233,7 @@ fun SplashScreen(
     }
 }
 
+// ایجاد یک لکه رنگی محو شده در پس‌زمینه
 @Composable
 fun Blob(color: Color, size: Dp, modifier: Modifier) {
     Box(

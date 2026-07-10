@@ -38,30 +38,31 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import com.yasinmoridi.traptap.ui.theme.TrapTapTheme
 import com.yasinmoridi.traptap.ui.util.PersianStrings
+import com.yasinmoridi.traptap.util.AppConstants
 import org.koin.android.ext.android.inject
 
+ //اکتیویتی اصلی برنامه که مسئول راه‌اندازی سنسورها، مدیریت صدا و رندر کردن رابط کاربری است
 class MainActivity : ComponentActivity(), SensorEventListener {
-    // تزریق وابستگی ViewModel با استفاده از Koin
+    // تزریق ویومدل با استفاده از Koin
     private val viewModel: GameViewModel by inject()
     
-    // مدیریت سنسورها (برای مرحله‌هایی که به شتاب‌سنج نیاز دارند)
+    // مدیریت سنسورها برای مراحل خاص (مانند شتاب‌سنج)
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
 
-    // گیرنده‌ای برای گوش دادن به تغییرات دکمه‌های ولوم گوشی
+    // گوش دادن به تغییرات ولوم گوشی در سطح سیستم
     private val volumeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "android.media.VOLUME_CHANGED_ACTION") {
+            if (intent?.action == AppConstants.VOLUME_CHANGED_ACTION) {
                 val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
                 val current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
                 val max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-                // خبر دادن به ViewModel که ولوم تغییر کرده
                 viewModel.onVolumeChanged(current, max)
             }
         }
     }
     
-    // مشاهده‌گر برای تغییرات میزان روشنایی صفحه (برای مراحل خاص)
+    // مشاهده تغییرات روشنایی صفحه (برای مراحل ترول)
     private val brightnessObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean, uri: Uri?) {
             super.onChange(selfChange, uri)
@@ -72,30 +73,29 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // فعال‌سازی حالت لبه‌تا‌لبه (تمام صفحه)
+        // فعال‌سازی نمایش لبه ‌تا‌ لبه (حذف حاشیه‌های استاتوس بار)
         enableEdgeToEdge()
         
-        // راه‌اندازی سنسور شتاب‌سنج
+        // تنظیمات سنسور شتاب‌سنج
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
-        // ثبت مشاهده‌گر روشنایی صفحه در سیستم
+        // ثبت ناظر روشنایی صفحه
         contentResolver.registerContentObserver(
             Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS),
             false,
             brightnessObserver
         )
 
-        // شروع رندر کردن رابط کاربری با Jetpack Compose
         setContent {
+            // ایجاد کنترلر نویگیشن برای جابجایی بین صفحات
             val navController = rememberNavController()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            // دریافت آخرین وضعیت بازی از ViewModel
             val state by viewModel.uiState.collectAsState()
             
-            // تعیین راست‌چین یا چپ‌چین بودن بر اساس زبان انتخابی
+            // تنظیم جهت صفحه (RTL برای فارسی، LTR برای انگلیسی)
             val layoutDirection = if (state.strings == PersianStrings) {
                 LayoutDirection.Rtl
             } else {
@@ -103,12 +103,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             }
 
             CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
-                // اعمال تم اختصاصی برنامه (تاریک یا روشن)
                 TrapTapTheme(darkTheme = state.isDarkMode) {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         bottomBar = {
-                            // نمایش نوار پایین فقط در صفحات لیست مراحل و تنظیمات
+                            // نمایش نوار پایین فقط در صفحات 'مراحل' و 'تنظیمات'
                             val showBottomBar = currentDestination?.hasRoute<AppDestination.Levels>() == true ||
                                     currentDestination?.hasRoute<AppDestination.Settings>() == true
 
@@ -118,6 +117,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                                     isDark = state.isDarkMode,
                                     currentDestination = currentDestination,
                                     onNavigate = { destination ->
+                                        // جابجایی بین بخش‌های اصلی اپلیکیشن
                                         navController.navigate(destination) {
                                             popUpTo(AppDestination.Levels) { saveState = true }
                                             launchSingleTop = true
@@ -129,6 +129,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                         }
                     ) { innerPadding ->
                         Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                            // راه‌اندازی گراف نویگیشن و مدیریت صفحات
                             SetUpNavGraph(navController = navController, viewModel = viewModel)
                         }
                     }
@@ -139,27 +140,26 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        // فعال کردن سنسور و گیرنده ولوم وقتی کاربر وارد برنامه می‌شود
+        // ثبت سنسورها هنگام بازگشت به برنامه
         accelerometer?.also { acc ->
             sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_UI)
         }
-        registerReceiver(volumeReceiver, IntentFilter("android.media.VOLUME_CHANGED_ACTION"))
+        registerReceiver(volumeReceiver, IntentFilter(AppConstants.VOLUME_CHANGED_ACTION))
     }
 
     override fun onPause() {
         super.onPause()
-        // غیرفعال کردن سنسورها برای بهینه‌سازی مصرف باتری وقتی کاربر از برنامه خارج می‌شود
+        // غیرفعال کردن سنسورها برای بهینه‌سازی باتری
         sensorManager.unregisterListener(this)
         unregisterReceiver(volumeReceiver)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // آزاد کردن مشاهده‌گر سیستم برای جلوگیری از نشت حافظه
+        // حذف ناظر روشنایی برای جلوگیری از نشت حافظه
         contentResolver.unregisterContentObserver(brightnessObserver)
     }
 
-    // این متد هر بار که گوشی تکان بخورد صدا زده می‌شود
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
             viewModel.onGravityChanged(
@@ -172,7 +172,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-    // گوش دادن به دکمه‌های سخت‌افزاری (برای مراحل ولوم صدا)
+    // گوش دادن به دکمه‌های سخت‌افزاری ولوم
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager

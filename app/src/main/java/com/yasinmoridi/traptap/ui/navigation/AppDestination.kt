@@ -1,17 +1,23 @@
 package com.yasinmoridi.traptap.ui.navigation
 
-@kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed interface AppDestination {
 
-    @kotlinx.serialization.Serializable
+    // صفحه خوش‌آمدگویی و لودینگ اولیه
+    @Serializable
     data object Splash : AppDestination
 
-    @kotlinx.serialization.Serializable
+    // صفحه انتخاب مراحل بازی
+    @Serializable
     data object Levels : AppDestination
 
-    @kotlinx.serialization.Serializable
+    // صفحه اصلی بازی و چالش‌ها
+    @Serializable
     data object Game : AppDestination
 
-    @kotlinx.serialization.Serializable
+    // صفحه تنظیمات اپلیکیشن
+    @Serializable
     data object Settings : AppDestination
 }

@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,22 +19,25 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SetUpNavGraph(
-    navController: NavHostController,
-    viewModel: GameViewModel = koinViewModel()
+    navController: NavHostController, // کنترلر اصلی جابجایی بین صفحات
+    viewModel: GameViewModel = koinViewModel() // دریافت ویومدل با استفاده از Koin
 ) {
+    // دریافت آخرین وضعیت (State) از ویومدل برای نمایش در صفحات
     val state by viewModel.uiState.collectAsState()
 
     NavHost(
         navController = navController,
-        startDestination = AppDestination.Splash,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None }
+        startDestination = AppDestination.Splash, // صفحه شروع اپلیکیشن
+        enterTransition = { EnterTransition.None }, // حذف انیمیشن‌های ورود پیش‌فرض
+        exitTransition = { ExitTransition.None }    // حذف انیمیشن‌های خروج پیش‌فرض
     ) {
+        // تعریف مسیر صفحه اسپلش
         composable<AppDestination.Splash> {
             SplashScreen(
                 strings = state.strings,
                 isDark = state.isDarkMode,
                 onFinished = {
+                    // بعد از اتمام لودینگ، به صفحه مراحل برو و اسپلش را از پشته حذف کن
                     navController.navigate(AppDestination.Levels) {
                         popUpTo(AppDestination.Splash) { inclusive = true }
                     }
@@ -44,12 +46,14 @@ fun SetUpNavGraph(
             )
         }
 
+        // تعریف مسیر صفحه لیست مراحل
         composable<AppDestination.Levels> {
             LevelsScreen(
                 strings = state.strings,
                 levels = state.levels,
                 isDark = state.isDarkMode,
                 onLevelClick = { level ->
+                    // انتخاب مرحله و رفتن به صفحه بازی
                     viewModel.selectLevel(level)
                     navController.navigate(AppDestination.Game)
                 },
@@ -57,6 +61,7 @@ fun SetUpNavGraph(
             )
         }
 
+        // تعریف مسیر صفحه اصلی بازی
         composable<AppDestination.Game> {
             GameScreen(
                 strings = state.strings,
@@ -74,14 +79,15 @@ fun SetUpNavGraph(
                 buttonTapCount = state.buttonTapCount,
                 holdProgress = state.holdProgress,
                 pinchScale = state.pinchScale,
-                onBack = { navController.popBackStack() },
-                onAction = { viewModel.handleAction(it) },
+                onBack = { navController.popBackStack() }, // بازگشت به صفحه قبل
+                onAction = { viewModel.handleAction(it) }, // ارسال اکشن‌های بازی به ویومدل
                 onToggleHint = { viewModel.toggleHint() },
                 onRestart = { viewModel.restartLevel() },
                 modifier = Modifier.fillMaxSize()
             )
         }
 
+        // تعریف مسیر صفحه تنظیمات
         composable<AppDestination.Settings> {
             SettingsScreen(
                 strings = state.strings,

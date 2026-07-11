@@ -142,8 +142,36 @@ class GameViewModel(
                     LevelData(it.id, LevelState.valueOf(it.state), it.stars, it.emoji)
                 }
                 _uiState.update { it.copy(levels = levels) }
+
+                // اگر تعداد مراحل در دیتابیس کمتر از MAX_LEVEL باشد، مراحل جدید را اضافه کن
+                if (entities.size < AppConstants.MAX_LEVEL) {
+                    syncNewLevels(entities)
+                }
             }
         }.launchIn(viewModelScope)
+    }
+
+    // اضافه کردن مراحل جدید به دیتابیس بدون پاک کردن داده‌های قبلی
+    private fun syncNewLevels(existingEntities: List<LevelEntity>) {
+        viewModelScope.launch {
+            val existingIds = existingEntities.map { it.id }.toSet()
+            val newLevels = (1..AppConstants.MAX_LEVEL)
+                .filter { it !in existingIds }
+                .map { id ->
+                    LevelEntity(
+                        id = id,
+                        state = AppConstants.STATE_LOCKED,
+                        emoji = when (id) {
+                            13 -> "🦁"
+                            14 -> "🐘"
+                            else -> AppConstants.ICON_DEFAULT_PUZZLE
+                        }
+                    )
+                }
+            if (newLevels.isNotEmpty()) {
+                repository.insertLevels(newLevels)
+            }
+        }
     }
 
 
@@ -163,6 +191,8 @@ class GameViewModel(
                     10 -> "🖐️"
                     11 -> "🤌"
                     12 -> "😫"
+                    13 -> "🦁"
+                    14 -> "🐘"
                     else -> AppConstants.ICON_DEFAULT_PUZZLE
                 })
             }

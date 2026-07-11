@@ -6,33 +6,39 @@ import com.yasinmoridi.traptap.data.db.LevelEntity
 import com.yasinmoridi.traptap.data.repository.GameRepository
 import com.yasinmoridi.traptap.ui.levels.util.LevelAction
 import com.yasinmoridi.traptap.ui.levels.util.LevelLogicDispatcher
-import com.yasinmoridi.traptap.ui.util.EnglishStrings
-import com.yasinmoridi.traptap.ui.util.PersianStrings
-import com.yasinmoridi.traptap.ui.util.ChineseStrings
-import com.yasinmoridi.traptap.ui.util.RussianStrings
-import com.yasinmoridi.traptap.ui.util.GermanStrings
-import com.yasinmoridi.traptap.ui.util.HindiStrings
-import com.yasinmoridi.traptap.ui.util.ArabicStrings
-import com.yasinmoridi.traptap.ui.util.FrenchStrings
-import com.yasinmoridi.traptap.ui.util.SpanishStrings
-import com.yasinmoridi.traptap.ui.util.HebrewStrings
-import com.yasinmoridi.traptap.ui.util.TurkishStrings
-import com.yasinmoridi.traptap.ui.util.VietnameseStrings
-import com.yasinmoridi.traptap.ui.util.PortugueseStrings
-import com.yasinmoridi.traptap.ui.util.JapaneseStrings
-import com.yasinmoridi.traptap.ui.util.KoreanStrings
-import com.yasinmoridi.traptap.ui.util.ItalianStrings
-import com.yasinmoridi.traptap.ui.util.IndonesianStrings
-import com.yasinmoridi.traptap.ui.util.ThaiStrings
-import com.yasinmoridi.traptap.ui.util.PolishStrings
-import com.yasinmoridi.traptap.ui.util.DutchStrings
-import com.yasinmoridi.traptap.ui.util.UkrainianStrings
-import com.yasinmoridi.traptap.ui.util.CzechStrings
-import com.yasinmoridi.traptap.ui.util.RomanianStrings
-import com.yasinmoridi.traptap.ui.util.HungarianStrings
-import com.yasinmoridi.traptap.ui.util.SwedishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.ArabicStrings
+import com.yasinmoridi.traptap.ui.util.i18n.ChineseStrings
+import com.yasinmoridi.traptap.ui.util.i18n.CzechStrings
+import com.yasinmoridi.traptap.ui.util.i18n.DutchStrings
+import com.yasinmoridi.traptap.ui.util.i18n.EnglishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.FrenchStrings
+import com.yasinmoridi.traptap.ui.util.i18n.GermanStrings
+import com.yasinmoridi.traptap.ui.util.i18n.HebrewStrings
+import com.yasinmoridi.traptap.ui.util.i18n.HindiStrings
+import com.yasinmoridi.traptap.ui.util.i18n.HungarianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.IndonesianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.ItalianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.JapaneseStrings
+import com.yasinmoridi.traptap.ui.util.i18n.KoreanStrings
+import com.yasinmoridi.traptap.ui.util.i18n.PersianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.PolishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.PortugueseStrings
+import com.yasinmoridi.traptap.ui.util.i18n.RomanianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.RussianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.SpanishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.SwedishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.ThaiStrings
+import com.yasinmoridi.traptap.ui.util.i18n.TurkishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.UkrainianStrings
+import com.yasinmoridi.traptap.ui.util.i18n.VietnameseStrings
 import com.yasinmoridi.traptap.util.AppConstants
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
@@ -318,8 +324,7 @@ class GameViewModel(
 
 
      // اضافه کردن سکه
-
-    private fun addCoins(amount: Int) {
+    fun addCoins(amount: Int) {
         viewModelScope.launch {
             val currentCoins = repository.getCoins().first()
             repository.saveCoins(currentCoins + amount)

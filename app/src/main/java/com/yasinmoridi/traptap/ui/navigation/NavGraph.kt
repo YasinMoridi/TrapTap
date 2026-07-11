@@ -16,6 +16,7 @@ import com.yasinmoridi.traptap.ui.screens.GameScreen
 import com.yasinmoridi.traptap.ui.screens.LevelsScreen
 import com.yasinmoridi.traptap.ui.screens.SettingsScreen
 import com.yasinmoridi.traptap.ui.screens.SplashScreen
+import com.yasinmoridi.traptap.ui.screens.ShopScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -59,6 +60,16 @@ fun SetUpNavGraph(
                     viewModel.selectLevel(level)
                     navController.navigate(AppDestination.Game)
                 },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        // تعریف مسیر صفحه فروشگاه
+        composable<AppDestination.Shop> {
+            ShopScreen(
+                strings = state.strings,
+                isDark = state.isDarkMode,
+                onPurchase = { coins -> viewModel.addCoins(coins) },
                 modifier = Modifier.fillMaxSize()
             )
         }

@@ -20,4 +20,8 @@ sealed interface AppDestination {
     // صفحه تنظیمات اپلیکیشن
     @Serializable
     data object Settings : AppDestination
+
+    // فروشگاه سکه
+    @Serializable
+    data object Shop : AppDestination
 }

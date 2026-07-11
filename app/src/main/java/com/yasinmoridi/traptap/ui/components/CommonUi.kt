@@ -35,7 +35,16 @@ fun BottomNavigationBar(
             .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceAround // توزیع یکنواخت دکمه‌ها
     ) {
-        // دکمه خانه (لیست مراحل)
+        // دکمه فروشگاه (سمت چپ)
+        BottomNavItem(
+            label = strings.shop,
+            icon = "💰",
+            active = currentDestination?.hasRoute<AppDestination.Shop>() == true,
+            isDark = isDark,
+            textSecondary = textSecondary
+        ) { onNavigate(AppDestination.Shop) }
+
+        // دکمه خانه (لیست مراحل - وسط)
         BottomNavItem(
             label = strings.home,
             icon = "🏠",
@@ -44,7 +53,7 @@ fun BottomNavigationBar(
             textSecondary = textSecondary
         ) { onNavigate(AppDestination.Levels) }
 
-        // دکمه تنظیمات (پروفایل)
+        // دکمه تنظیمات (سمت راست)
         BottomNavItem(
             label = strings.profile,
             icon = "⚙️",

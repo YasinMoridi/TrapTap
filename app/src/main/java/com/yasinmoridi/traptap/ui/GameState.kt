@@ -1,7 +1,7 @@
 package com.yasinmoridi.traptap.ui
 
 import com.yasinmoridi.traptap.ui.util.AppStrings
-import com.yasinmoridi.traptap.ui.util.EnglishStrings
+import com.yasinmoridi.traptap.ui.util.i18n.EnglishStrings
 import com.yasinmoridi.traptap.util.AppConstants
 
 data class GameState(

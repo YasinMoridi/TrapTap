@@ -40,7 +40,9 @@ val VietnameseStrings = AppStrings(
         9 to "Môi trường ảnh hưởng đến khả năng hiển thị.",
         10 to "Kiểm tra sức bền.",
         11 to "Phóng to nó lên.",
-        12 to "Kiên trì sẽ thành công."
+        12 to "Kiên trì sẽ thành công.",
+        13 to "Hình ảnh có thể gây đánh lừa.",
+        14 to "Hãy suy nghĩ thực tế."
     ),
     detailedHints = mapOf(
         1 to "Các phím nằm trên bàn phím. Không cần khóa vật lý.",
@@ -54,7 +56,9 @@ val VietnameseStrings = AppStrings(
         9 to "Đi đến nơi sáng sủa hoặc thay đổi độ sáng màn hình theo cách thủ công.",
         10 to "Giữ ngón tay của bạn trên nút trong đủ 10 giây.",
         11 to "Sử dụng hai ngón tay để 'phóng to' hình ảnh cánh cửa.",
-        12 to "Nhấn vào nút ít nhất 10 lần cho đến khi nó 'hỏng'."
+        12 to "Nhấn vào nút ít nhất 10 lần cho đến khi nó 'hỏng'.",
+        13 to "Chạm vào con vật trông có vẻ lớn hơn trên màn hình, ngay cả khi nó nhỏ hơn trong thực tế.",
+        14 to "Chạm vào con vật thực sự lớn hơn ngoài đời thực, bất kể kích thước của nó trên màn hình."
     ),
     correctMsg = "🎉 Bạn thực sự đã đúng! (Có phải là đoán không?)",
     wrongMsg = "😂 Không! Con troll đang cười nhạo bạn.",
@@ -85,6 +89,7 @@ val VietnameseStrings = AppStrings(
     louderMessage = "KHÔNG NGHE THẤY GÌ CẢ! TO HƠN NỮA!",
     tooDarkMessage = "Ở ĐÂY TỐI QUÁ...",
     stretchDoorMessage = "KÉO CÁNH CỬA ĐỂ MỞ",
+    whichOneIsBigger = "Cái nào lớn hơn?",
     settingsTitle = "Cài đặt",
     languageLabel = "Ngôn ngữ",
     themeLabel = "Chủ đề ứng dụng",

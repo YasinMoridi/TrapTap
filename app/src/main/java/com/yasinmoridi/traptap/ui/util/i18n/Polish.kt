@@ -85,6 +85,7 @@ val PolishStrings = AppStrings(
     louderMessage = "NIE SŁYSZĘ CIĘ! GŁOŚNIEJ!",
     tooDarkMessage = "TU JEST ZA CIEMNO...",
     stretchDoorMessage = "ROZCIĄGNIJ DRZWI, ABY OTWORZYĆ",
+    whichOneIsBigger = "Który jest większy?",
     settingsTitle = "Ustawienia",
     languageLabel = "Język",
     themeLabel = "Motyw Aplikacji",

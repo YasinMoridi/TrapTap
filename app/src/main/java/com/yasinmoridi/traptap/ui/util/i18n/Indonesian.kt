@@ -85,6 +85,7 @@ val IndonesianStrings = AppStrings(
     louderMessage = "TIDAK BISA MENDENGARMU! LEBIH KERAS!",
     tooDarkMessage = "DI SINI TERLALU GELAP...",
     stretchDoorMessage = "TARIK PINTU UNTUK MEMBUKA",
+    whichOneIsBigger = "Mana yang lebih besar?",
     settingsTitle = "Pengaturan",
     languageLabel = "Bahasa",
     themeLabel = "Tema Aplikasi",

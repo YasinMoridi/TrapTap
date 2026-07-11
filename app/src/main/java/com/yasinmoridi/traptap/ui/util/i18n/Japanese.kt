@@ -40,7 +40,9 @@ val JapaneseStrings = AppStrings(
         9 to "環境が視認性に影響するよ。",
         10 to "耐久テストだ。",
         11 to "拡大してみて。",
-        12 to "粘り強さが実を結ぶ。"
+        12 to "粘り強さが実を結ぶ。",
+        13 to "視覚は欺くことがあります。",
+        14 to "現実的に考えて。"
     ),
     detailedHints = mapOf(
         1 to "キーボードのキーのことだよ。物理的な錠は不要。",
@@ -54,7 +56,9 @@ val JapaneseStrings = AppStrings(
         9 to "明るい場所に行くか、手動で画面の輝度を変えて。",
         10 to "ボタンを10秒間押し続けて。",
         11 to "2本の指でドアの画像を「ズームイン」して。",
-        12 to "ボタンが「壊れる」まで少なくとも10回タップして。"
+        12 to "ボタンが「壊れる」まで少なくとも10回タップして。",
+        13 to "画面上で大きく見える動物をタップしてください（実際には小さくても）。",
+        14 to "画面上のサイズに関係なく、現実の世界で実際に大きい動物をタップしてください。"
     ),
     correctMsg = "🎉 まさかの正解！（勘でしょ？）",
     wrongMsg = "😂 ぶっぶー！トロールが笑ってるよ。",
@@ -85,6 +89,7 @@ val JapaneseStrings = AppStrings(
     louderMessage = "聞こえないよ！もっと大きく！",
     tooDarkMessage = "ここは暗すぎるよ...",
     stretchDoorMessage = "ドアを引っ張って開けて",
+    whichOneIsBigger = "どちらが大きいですか？",
     settingsTitle = "設定",
     languageLabel = "言語",
     themeLabel = "アプリのテーマ",

@@ -40,7 +40,9 @@ val ChineseStrings = AppStrings(
         9 to "环境影响可见度。",
         10 to "耐力测试。",
         11 to "把它放大。",
-        12 to "坚持就是胜利。"
+        12 to "坚持就是胜利。",
+        13 to "视觉效果可能具有欺骗性。",
+        14 to "现实地思考。"
     ),
     detailedHints = mapOf(
         1 to "按键在键盘上。不需要实物锁。",
@@ -54,7 +56,9 @@ val ChineseStrings = AppStrings(
         9 to "去光亮的地方或手动调高屏幕亮度。",
         10 to "手指按住按钮整整10秒。",
         11 to "用两个手指在门图上“放大”。",
-        12 to "点击按钮至少10次，直到它“坏掉”。"
+        12 to "点击按钮至少10次，直到它“坏掉”。",
+        13 to "点击屏幕上看起来较大的动物，即使它在现实生活中较小。",
+        14 to "点击现实生活中实际较大的动物，无论它在屏幕上的大小如何。"
     ),
     correctMsg = "🎉 你竟然答对了！（是猜的吧？）",
     wrongMsg = "😂 不对！特罗尔在嘲笑你。",
@@ -67,7 +71,8 @@ val ChineseStrings = AppStrings(
         "😈 肯定只是新手运气。",
         "😒 随便啦。你还是没那么聪明。",
         "🙄 这次我让你赢的。别太兴奋。",
-        "👺 下一关会碾碎你那小脑袋。"
+        "👺 下一关会碾碎你那小脑袋。",
+        "🤡 居然被你解开了，不开心。"
     ),
     nextLevel = "下一关",
     exitAppToWin = "退出应用即可获胜",
@@ -85,6 +90,7 @@ val ChineseStrings = AppStrings(
     louderMessage = "听不见！再大声点！",
     tooDarkMessage = "这里太黑了...",
     stretchDoorMessage = "拉开门即可进入",
+    whichOneIsBigger = "哪个更大？",
     settingsTitle = "设置",
     languageLabel = "语言",
     themeLabel = "应用主题",

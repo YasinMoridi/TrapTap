@@ -8,7 +8,7 @@ object AppConstants {
     const val TABLE_LEVELS = "levels"
 
     // Game Config
-    const val MAX_LEVEL = 12
+    const val MAX_LEVEL = 14
     const val INITIAL_COINS = 100
     const val WIN_REWARD = 50
     

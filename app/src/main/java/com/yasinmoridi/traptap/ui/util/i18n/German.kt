@@ -40,7 +40,9 @@ val GermanStrings = AppStrings(
         9 to "Die Umgebung beeinflusst die Sichtbarkeit.",
         10 to "Ausdauertest.",
         11 to "Vergrößere es.",
-        12 to "Beharrlichkeit zahlt sich aus."
+        12 to "Beharrlichkeit zahlt sich aus.",
+        13 to "Der Schein kann trügen.",
+        14 to "Denke realistisch."
     ),
     detailedHints = mapOf(
         1 to "Die Tasten befinden sich auf einer Tastatur. Kein physisches Schloss erforderlich.",
@@ -54,7 +56,9 @@ val GermanStrings = AppStrings(
         9 to "Gehe an einen hellen Ort oder ändere die Bildschirmhelligkeit manuell.",
         10 to "Halte deinen Finger für volle 10 Sekunden auf dem Button.",
         11 to "Benutze zwei Finger, um das Türbild 'heranzuzoomen'.",
-        12 to "Tippe den Button mindestens 10 Mal an, bis er 'kaputt' geht."
+        12 to "Tippe den Button mindestens 10 Mal an, bis er 'kaputt' geht.",
+        13 to "Tippe auf das Tier, das auf dem Bildschirm *größer* aussieht, auch wenn es in Wirklichkeit kleiner ist.",
+        14 to "Tippe auf das Tier, das in Wirklichkeit größer ist, unabhängig von seiner Größe auf dem Bildschirm."
     ),
     correctMsg = "🎉 Du hast es tatsächlich richtig! (War es geraten?)",
     wrongMsg = "😂 Nö! Der Troll lacht dich aus.",
@@ -85,6 +89,7 @@ val GermanStrings = AppStrings(
     louderMessage = "KANN DICH NICHT HÖREN! LAUTER!",
     tooDarkMessage = "ES IST ZU DUNKEL HIER...",
     stretchDoorMessage = "ZIEHE DIE TÜR, UM SIE ZU ÖFFNEN",
+    whichOneIsBigger = "WELCHES IST GRÖSSER?",
     settingsTitle = "Einstellungen",
     languageLabel = "Sprache",
     themeLabel = "App-Design",

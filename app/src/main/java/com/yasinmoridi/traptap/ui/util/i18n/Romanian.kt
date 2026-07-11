@@ -85,6 +85,7 @@ val RomanianStrings = AppStrings(
     louderMessage = "NU TE AUD! MAI TARE!",
     tooDarkMessage = "E PREA ÎNTUNERIC AICI...",
     stretchDoorMessage = "ÎNTINDE UȘA PENTRU A O DESCHIDE",
+    whichOneIsBigger = "Care este mai mare?",
     settingsTitle = "Setări",
     languageLabel = "Limbă",
     themeLabel = "Tema Aplicației",

@@ -85,6 +85,7 @@ val SwedishStrings = AppStrings(
     louderMessage = "HÖR DIG INTE! HÖGRE!",
     tooDarkMessage = "DET ÄR FÖR MÖRKT HÄR INNE...",
     stretchDoorMessage = "STRÄCK UT DÖRREN FÖR ATT ÖPPNA",
+    whichOneIsBigger = "Vilken är större?",
     settingsTitle = "Inställningar",
     languageLabel = "Språk",
     themeLabel = "App-tema",

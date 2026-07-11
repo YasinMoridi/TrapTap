@@ -40,7 +40,9 @@ val SpanishStrings = AppStrings(
         9 to "El entorno afecta la visibilidad.",
         10 to "Prueba de resistencia.",
         11 to "Hazlo más grande.",
-        12 to "La persistencia da sus frutos."
+        12 to "La persistencia da sus frutos.",
+        13 to "Las apariencias pueden engañar.",
+        14 to "Piensa de forma realista."
     ),
     detailedHints = mapOf(
         1 to "Las teclas están en un teclado. No se necesita cerradura física.",
@@ -54,7 +56,9 @@ val SpanishStrings = AppStrings(
         9 to "Ve a un lugar iluminado o cambia el brillo de la pantalla manualmente.",
         10 to "Mantén el dedo presionado en el botón durante 10 segundos completos.",
         11 to "Usa dos dedos para hacer 'zoom' en la imagen de la puerta.",
-        12 to "Toca el botón al menos 10 veces hasta que se 'rompa'."
+        12 to "Toca el botón al menos 10 veces hasta que se 'rompa'.",
+        13 to "Toca el animal que *parece* más grande en la pantalla, aunque sea más pequeño en la realidad.",
+        14 to "Toca el animal que es realmente más grande en la vida real, independientemente de su tamaño en la pantalla."
     ),
     correctMsg = "🎉 ¡Realmente acertaste! (¿Fue una suposición?)",
     wrongMsg = "😂 ¡No! El troll se ríe de ti.",
@@ -85,6 +89,7 @@ val SpanishStrings = AppStrings(
     louderMessage = "¡NO TE OIGO! ¡MÁS FUERTE!",
     tooDarkMessage = "ESTÁ DEMASIADO OSCURO AQUÍ...",
     stretchDoorMessage = "ESTIRA LA PUERTA PARA ABRIR",
+    whichOneIsBigger = "¿CUÁL ES MÁS GRANDE?",
     settingsTitle = "Ajustes",
     languageLabel = "Idioma",
     themeLabel = "Tema de la aplicación",

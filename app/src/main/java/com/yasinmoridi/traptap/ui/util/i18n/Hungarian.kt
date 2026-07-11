@@ -85,6 +85,7 @@ val HungarianStrings = AppStrings(
     louderMessage = "NEM HALLALAK! HANGOSABBAN!",
     tooDarkMessage = "TÚL SÖTÉT VAN ITT...",
     stretchDoorMessage = "NYÚJTSD KI AZ AJTÓT A NYITÁSHOZ",
+    whichOneIsBigger = "Melyik a nagyobb?",
     settingsTitle = "Beállítások",
     languageLabel = "Nyelv",
     themeLabel = "Alkalmazás témája",

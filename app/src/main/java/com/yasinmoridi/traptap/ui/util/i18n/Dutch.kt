@@ -40,7 +40,9 @@ val DutchStrings = AppStrings(
         9 to "Omgeving beïnvloedt zichtbaarheid.",
         10 to "Uithoudingstest.",
         11 to "Vergroot het maar.",
-        12 to "De aanhouder wint."
+        12 to "De aanhouder wint.",
+        13 to "Beelden kunnen bedrieglijk zijn.",
+        14 to "Denk realistisch."
     ),
     detailedHints = mapOf(
         1 to "De toetsen zitten op een toetsenbord. Geen fysiek slot nodig.",
@@ -54,7 +56,9 @@ val DutchStrings = AppStrings(
         9 to "Ga naar een lichte plek of verander de helderheid handmatig.",
         10 to "Houd je vinger 10 seconden lang op de knop.",
         11 to "Gebruik twee vingers om 'in te zoomen' op de afbeelding van de deur.",
-        12 to "Tik minstens 10 keer op de knop totdat hij 'kapot' gaat."
+        12 to "Tik minstens 10 keer op de knop totdat hij 'kapot' gaat.",
+        13 to "Tik op het dier dat er op het scherm *groter* uitziet, ook al is het in het echt kleiner.",
+        14 to "Tik op het dier dat in het echt groter is, ongeacht de grootte op het scherm."
     ),
     correctMsg = "🎉 Je hebt het echt goed! (Was het een gokje?)",
     wrongMsg = "😂 Nee! De troll lacht je uit.",
@@ -85,6 +89,7 @@ val DutchStrings = AppStrings(
     louderMessage = "IK KAN JE NIET HOREN! HARDER!",
     tooDarkMessage = "HET IS HIER TE DONKER...",
     stretchDoorMessage = "REK DE DEUR UIT OM TE OPENEN",
+    whichOneIsBigger = "WELKE IS GROTER?",
     settingsTitle = "Instellingen",
     languageLabel = "Taal",
     themeLabel = "App Thema",

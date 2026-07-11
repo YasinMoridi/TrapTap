@@ -40,7 +40,9 @@ val ItalianStrings = AppStrings(
         9 to "L'ambiente influisce sulla visibilità.",
         10 to "Test di resistenza.",
         11 to "Ingrandiscilo.",
-        12 to "La persistenza paga."
+        12 to "La persistenza paga.",
+        13 to "L'apparenza può ingannare.",
+        14 to "Pensa in modo realistico."
     ),
     detailedHints = mapOf(
         1 to "I tasti sono su una tastiera. Nessuna serratura fisica necessaria.",
@@ -54,7 +56,9 @@ val ItalianStrings = AppStrings(
         9 to "Vai in un luogo luminoso o cambia manualmente la luminosità dello schermo.",
         10 to "Tieni premuto il pulsante per 10 secondi interi.",
         11 to "Usa due dita per fare 'zoom' sull'immagine della porta.",
-        12 to "Tocca il pulsante almeno 10 volte finché non si 'rompe'."
+        12 to "Tocca il pulsante almeno 10 volte finché non si 'rompe'.",
+        13 to "Tocca l'animale che *sembra* più grande sullo schermo, anche se è più piccolo nella realtà.",
+        14 to "Tocca l'animale che è effettivamente più grande nella vita reale, indipendentemente dalle sue dimensioni sullo schermo."
     ),
     correctMsg = "🎉 Ci sei riuscito davvero! (È stata fortuna?)",
     wrongMsg = "😂 No! Il troll ride di te.",
@@ -85,6 +89,7 @@ val ItalianStrings = AppStrings(
     louderMessage = "NON TI SENTO! PIÙ FORTE!",
     tooDarkMessage = "C'È TROPPO BUIO QUI...",
     stretchDoorMessage = "TIRA LA PORTA PER APRIRE",
+    whichOneIsBigger = "QUAL È PIÙ GRANDE?",
     settingsTitle = "Impostazioni",
     languageLabel = "Lingua",
     themeLabel = "Tema App",

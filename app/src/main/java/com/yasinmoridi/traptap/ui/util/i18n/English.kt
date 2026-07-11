@@ -40,7 +40,9 @@ val EnglishStrings = AppStrings(
         9 to "Environment affects visibility.",
         10 to "Endurance test.",
         11 to "Scale it up.",
-        12 to "Persistence pays off."
+        12 to "Persistence pays off.",
+        13 to "Visuals can be deceiving.",
+        14 to "Think realistically."
     ),
     detailedHints = mapOf(
         1 to "The keys are on a keyboard. No physical lock needed.",
@@ -54,7 +56,9 @@ val EnglishStrings = AppStrings(
         9 to "Go somewhere bright or change screen brightness manually.",
         10 to "Keep your finger pressed on the button for 10 full seconds.",
         11 to "Use two fingers to 'zoom in' on the door image.",
-        12 to "Tap the button at least 10 times until it 'breaks'."
+        12 to "Tap the button at least 10 times until it 'breaks'.",
+        13 to "Tap the animal that *looks* larger on the screen, even if it's smaller in real life.",
+        14 to "Tap the animal that is actually larger in real life, regardless of its size on the screen."
     ),
     correctMsg = "🎉 You actually got it right! (Was it a guess?)",
     wrongMsg = "😂 Nope! The troll laughs at you.",
@@ -85,6 +89,7 @@ val EnglishStrings = AppStrings(
     louderMessage = "CAN'T HEAR YOU! LOUDER!",
     tooDarkMessage = "IT'S TOO DARK IN HERE...",
     stretchDoorMessage = "STRETCH THE DOOR TO OPEN",
+    whichOneIsBigger = "WHICH ONE IS BIGGER?",
     settingsTitle = "Settings",
     languageLabel = "Language",
     themeLabel = "App Theme",

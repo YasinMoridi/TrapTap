@@ -85,6 +85,7 @@ val HebrewStrings = AppStrings(
     louderMessage = "לא שומע אותך! חזק יותר!",
     tooDarkMessage = "חשוך מדי כאן...",
     stretchDoorMessage = "מתח את הדלת כדי לפתוח",
+    whichOneIsBigger = "מה יותר גדול?",
     settingsTitle = "הגדרות",
     languageLabel = "שפה",
     themeLabel = "עיצוב האפליקציה",

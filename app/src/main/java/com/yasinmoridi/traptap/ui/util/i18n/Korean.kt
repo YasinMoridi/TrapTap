@@ -40,7 +40,9 @@ val KoreanStrings = AppStrings(
         9 to "환경이 가시성에 영향을 줍니다.",
         10 to "인내심 테스트입니다.",
         11 to "확대해보세요.",
-        12 to "끈기가 결실을 맺습니다."
+        12 to "끈기가 결실을 맺습니다.",
+        13 to "시각적 효과는 속일 수 있습니다.",
+        14 to "현실적으로 생각하세요."
     ),
     detailedHints = mapOf(
         1 to "키보드의 키를 말하는 거예요. 물리적인 자물쇠는 필요 없죠.",
@@ -54,7 +56,9 @@ val KoreanStrings = AppStrings(
         9 to "밝은 곳으로 가거나 화면 밝기를 수동으로 높이세요.",
         10 to "버튼을 10초 동안 계속 누르고 계세요.",
         11 to "두 손가락으로 문 이미지를 '확대'하세요.",
-        12 to "버튼이 '부서질' 때까지 최소 10번 탭하세요."
+        12 to "버튼이 '부서질' 때까지 최소 10번 탭하세요.",
+        13 to "화면에서 더 크게 보이는 동물을 누르세요(실제로는 더 작더라도).",
+        14 to "화면의 크기에 상관없이 실제 생활에서 더 큰 동물을 누르세요."
     ),
     correctMsg = "🎉 설마 맞히다니! (찍은 거 아니죠?)",
     wrongMsg = "😂 땡! 트롤이 비웃고 있네요.",
@@ -85,6 +89,7 @@ val KoreanStrings = AppStrings(
     louderMessage = "안 들려요! 더 크게!",
     tooDarkMessage = "여기가 너무 어두워요...",
     stretchDoorMessage = "문을 당겨서 여세요",
+    whichOneIsBigger = "어느 것이 더 큰가요?",
     settingsTitle = "설정",
     languageLabel = "언어",
     themeLabel = "앱 테마",

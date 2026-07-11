@@ -40,7 +40,9 @@ val TurkishStrings = AppStrings(
         9 to "Çevre görünürlüğü etkiler.",
         10 to "Dayanıklılık testi.",
         11 to "Büyüt onu.",
-        12 to "Azim sonuç verir."
+        12 to "Azim sonuç verir.",
+        13 to "Görünüş aldatıcı olabilir.",
+        14 to "Gerçekçi düşün."
     ),
     detailedHints = mapOf(
         1 to "Tuşlar klavyededir. Fiziksel kilide gerek yok.",
@@ -54,7 +56,9 @@ val TurkishStrings = AppStrings(
         9 to "Aydınlık bir yere git veya ekran parlaklığını manuel olarak değiştir.",
         10 to "Parmağını düğme üzerinde tam 10 saniye basılı tut.",
         11 to "Kapı resmini 'yakınlaştırmak' için iki parmağını kullan.",
-        12 to "Düğmeye 'kırılana' kadar en az 10 kez dokun."
+        12 to "Düğmeye 'kırılana' kadar en az 10 kez dokun.",
+        13 to "Ekranda *daha büyük görünen* hayvana dokun, gerçek hayatta daha küçük olsa bile.",
+        14 to "Ekrandaki boyutundan bağımsız olarak, gerçek hayatta gerçekten daha büyük olan hayvana dokun."
     ),
     correctMsg = "🎉 Gerçekten doğru bildin! (Tahmin miydi?)",
     wrongMsg = "😂 Hayır! Trol sana gülüyor.",
@@ -85,6 +89,7 @@ val TurkishStrings = AppStrings(
     louderMessage = "SENİ DUYAMIYORUM! DAHA YÜKSEK SESLE!",
     tooDarkMessage = "BURASI ÇOK KARANLIK...",
     stretchDoorMessage = "AÇMAK İÇİN KAPIYI ESNET",
+    whichOneIsBigger = "HANGİSİ DAHA BÜYÜK?",
     settingsTitle = "Ayarlar",
     languageLabel = "Dil",
     themeLabel = "Uygulama Teması",

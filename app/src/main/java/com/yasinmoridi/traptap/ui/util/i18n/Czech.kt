@@ -40,7 +40,9 @@ val CzechStrings = AppStrings(
         9 to "Prostředí ovlivňuje viditelnost.",
         10 to "Test vytrvalosti.",
         11 to "Zvětši to.",
-        12 to "Vytrvalost se vyplácí."
+        12 to "Vytrvalost se vyplácí.",
+        13 to "Vzhled může klamat.",
+        14 to "Přemýšlej realisticky."
     ),
     detailedHints = mapOf(
         1 to "Klávesy jsou na klávesnici. Žádný fyzický zámek není potřeba.",
@@ -54,7 +56,9 @@ val CzechStrings = AppStrings(
         9 to "Jdi na světlé místo nebo změň jas obrazovky ručně.",
         10 to "Podrž prst na tlačítku po celých 10 sekund.",
         11 to "Pomocí dvou prstů 'přibliž' obrázek dveří.",
-        12 to "Klepni na tlačítko alespoň 10krát, dokud se 'nerozbije'."
+        12 to "Klepni na tlačítko alespoň 10krát, dokud se 'nerozbije'.",
+        13 to "Klepni na zvíře, které na obrazovce *vypadá* větší, i když je ve skutečnosti menší.",
+        14 to "Klepni na zvíře, které je ve skutečnosti větší, bez ohledu na jeho velikost na obrazovce."
     ),
     correctMsg = "🎉 Ty jsi to fakt trefil! (Byl to tip?)",
     wrongMsg = "😂 Ne! Troll se ti směje.",
@@ -85,6 +89,7 @@ val CzechStrings = AppStrings(
     louderMessage = "NESLYŠÍM TĚ! NAHLAS!",
     tooDarkMessage = "JE TU MOC TMA...",
     stretchDoorMessage = "ROZTÁHNI DVEŘE PRO OTEVŘENÍ",
+    whichOneIsBigger = "KTERÝ JE VĚTŠÍ?",
     settingsTitle = "Nastavení",
     languageLabel = "Jazyk",
     themeLabel = "Motiv aplikace",

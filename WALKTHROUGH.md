@@ -21,6 +21,8 @@ Welcome to the official walkthrough for **TrollMind**. If you're stuck, use the 
 | **10** | Hold | **Hold the red button** for 10 full seconds. |
 | **11** | Pinch | Use two fingers to **zoom in (pinch out)** on the door. |
 | **12** | Tired | **Keep tapping** the button until it falls off the screen. |
+| **13** | Visual Bigger | Tap the animal that **looks bigger on the screen** (Lion). |
+| **14** | Reality Bigger | Tap the animal that is **actually bigger in real life** (Elephant). |
 
 ---
 
@@ -40,6 +42,8 @@ Welcome to the official walkthrough for **TrollMind**. If you're stuck, use the 
 | **۱۰** | نگه داشتن | دکمه قرمز را **۱۰ ثانیه کامل** نگه دارید و رها نکنید. |
 | **۱۱** | زوم | با دو انگشت آیکون در را **بکشید (بزرگ کنید)** تا باز شود. |
 | **۱۲** | خستگی | **آنقدر روی دکمه کلیک کنید** تا از خستگی به پایین سقوط کند. |
+| **۱۳** | بزرگنمایی ظاهری | روی حیوانی بزنید که در **تصویر بزرگتر** است (شیر). |
+| **۱۴** | بزرگنمایی واقعی | روی حیوانی بزنید که در **واقعیت بزرگتر** است (فیل). |
 
 ---
 **Tip:** The troll hates it when you use this guide! 😉  

@@ -85,6 +85,7 @@ val UkrainianStrings = AppStrings(
     louderMessage = "НЕ ЧУЮ ТЕБЕ! ГУЧНІШЕ!",
     tooDarkMessage = "ТУТ ЗАНАДТО ТЕМНО...",
     stretchDoorMessage = "РОЗТЯГНИ ДВЕРІ, ЩОБ ВІДКРИТИ",
+    whichOneIsBigger = "Який більший?",
     settingsTitle = "Налаштування",
     languageLabel = "Мова",
     themeLabel = "Тема додатка",

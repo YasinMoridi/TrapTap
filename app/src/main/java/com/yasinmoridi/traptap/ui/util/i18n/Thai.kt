@@ -85,6 +85,7 @@ val ThaiStrings = AppStrings(
     louderMessage = "ไม่ได้ยินเลย! ดังกว่านี้!",
     tooDarkMessage = "ที่นี่มืดเกินไป...",
     stretchDoorMessage = "ยืดประตูเพื่อเปิด",
+    whichOneIsBigger = "อันไหนใหญ่กว่ากัน?",
     settingsTitle = "การตั้งค่า",
     languageLabel = "ภาษา",
     themeLabel = "ธีมแอป",

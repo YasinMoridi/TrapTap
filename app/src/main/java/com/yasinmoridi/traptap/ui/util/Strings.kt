@@ -53,6 +53,7 @@ data class AppStrings(
     val louderMessage: String,
     val tooDarkMessage: String,
     val stretchDoorMessage: String,
+    val whichOneIsBigger: String,
 
     // Settings Screen
     val settingsTitle: String,

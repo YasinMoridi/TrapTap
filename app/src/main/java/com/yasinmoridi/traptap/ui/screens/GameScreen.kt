@@ -92,6 +92,8 @@ fun GameScreen(
                             10 -> Level10Trap(strings, textPrimary, holdProgress) { onAction(LevelAction.HoldProgress(it)) }
                             11 -> Level11Trap(strings, textPrimary, pinchScale) { onAction(LevelAction.Pinch(it)) }
                             12 -> Level12Trap(strings, textPrimary, buttonTapCount) { onAction(LevelAction.TiredButtonClick) }
+                            13 -> Level13Trap(strings, textPrimary) { opt, isCorr -> onAction(LevelAction.OptionSelected(opt, isCorr)) }
+                            14 -> Level14Trap(strings, textPrimary) { opt, isCorr -> onAction(LevelAction.OptionSelected(opt, isCorr)) }
                             else -> {
                                 Level1Trap(strings, textPrimary, cardSurface, isDark, selectedOption, isAnswered) { opt, isCorr -> 
                                     onAction(LevelAction.OptionSelected(opt, isCorr))
@@ -105,7 +107,7 @@ fun GameScreen(
             val correctKey = AppConstants.OPTION_KEYS[AppConstants.CORRECT_OPTION_INDEX]
             TrollMessageArea(strings, isAnswered, selectedOption == correctKey, trollMessageIndex, isDark, textSecondary)
             
-            // نوار انتخاب راهنمایی (جایگزین دکمه تک هینت)
+            // نوار انتخاب راهنمایی
             HintSelectionRow(strings, coins, onPurchase = { onAction(LevelAction.PurchaseHint(it)) })
             
             GameBottomActions(strings, isDark, textSecondary, onBack, onRestart)

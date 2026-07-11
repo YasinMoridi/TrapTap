@@ -105,7 +105,6 @@ data class AppStrings(
     val chooseHintTitle: String,
 )
 
-
 // دریافت نام زبان در حالت بومی (Native) برای نمایش در لیست انتخاب زبان
 fun getNativeLanguageName(code: String): String {
     return when (code) {

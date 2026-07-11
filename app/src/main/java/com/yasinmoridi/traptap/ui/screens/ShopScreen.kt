@@ -29,7 +29,7 @@ fun ShopScreen(
     strings: AppStrings,
     isDark: Boolean,
     onPurchase: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val textPrimary = if (isDark) AppColors.Dark.TextPrimary else AppColors.Light.TextPrimary
     val textSecondary = if (isDark) AppColors.Dark.TextSecondary else AppColors.Light.TextSecondary
@@ -87,7 +87,9 @@ fun ShopScreen(
                     colors = CardDefaults.cardColors(containerColor = cardSurface)
                 ) {
                     Column(
-                        modifier = Modifier.padding(20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -115,20 +117,20 @@ fun ShopScreen(
     if (selectedItem != null) {
         AlertDialog(
             onDismissRequest = { selectedItem = null },
-            title = { 
+            title = {
                 Text(
-                    strings.freeCoinsTitle, 
-                    fontWeight = FontWeight.Black, 
+                    strings.freeCoinsTitle,
+                    fontWeight = FontWeight.Black,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
-                ) 
+                )
             },
-            text = { 
+            text = {
                 Text(
-                    strings.freeCoinsMsg, 
+                    strings.freeCoinsMsg,
                     textAlign = TextAlign.Center,
                     lineHeight = 22.sp
-                ) 
+                )
             },
             confirmButton = {
                 Button(
